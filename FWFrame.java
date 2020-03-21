@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class FloydWarshall extends JFrame{
+public class FWFrame extends JFrame{
     private JButton addVertex;
     private JButton addEdge;
     private JButton removeVertex;
@@ -108,7 +108,7 @@ public class FloydWarshall extends JFrame{
 
         description.add(desc);
     }
-    public FloydWarshall(){
+    public FWFrame(){
         super("Floyd-Warshall Algorithm Visualization");
         setSize(1200, 700);
         setLayout(null);
@@ -125,6 +125,6 @@ public class FloydWarshall extends JFrame{
     }
 
     public static void main(String[] args) {
-        new FloydWarshall();
+        new FWFrame();
     }
 }
