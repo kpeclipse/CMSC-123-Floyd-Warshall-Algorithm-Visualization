@@ -1,0 +1,22 @@
+//
+VERTICES:
+hi
+were
+one
+direction
+niall
+louis
+liam
+harry
+EDGES:
+//
+//
+//
+direction louis 3
+louis direction 2
+were direction 5
+one were 3
+were one 6
+one louis 6
+liam one 2
+liam niall 5
