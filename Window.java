@@ -46,8 +46,7 @@ public class Window extends JFrame {
 
         buttons.setBounds(950, 0, 250, 300);
         adjustments.setBounds(950, 300, 250, 425);
-        display.setBounds(400, 0, 550, height);
-
+        display.setLocation(400, 0);
         add(buttons);
         add(adjustments);
         add(display);

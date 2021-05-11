@@ -14,22 +14,21 @@ import javax.swing.JScrollPane;
 
 public class GraphPanel extends JPanel {
     private Window window;
-    private JScrollPane canvas;
     private JPanel canvasPanel;
 
     public GraphPanel(Window w) {
         window = w;
+        setSize(550, 725);
         setLayout(null);
-        add(setCanvasPanel(w.display.getSize()));
-        setSize(w.display.getWidth(), w.display.getHeight());
+        add(setCanvasPanel());
     }
 
-    public JPanel setCanvasPanel(Dimension size) {
+    public JPanel setCanvasPanel() {
         JPanel panel = new JPanel();
+        panel.setSize(550, 725);
         canvasPanel = new JPanel() {
             @Override
             public void paintComponent(Graphics g) {
-                paintComponent(g);
                 int endX = 520, endY = 695;
                 if (window.g.vertices != null) {
                     for (int i = 0; i < window.g.vertices.size(); i++) {
@@ -50,6 +49,7 @@ public class GraphPanel extends JPanel {
                 }
             }
         };
+
         canvasPanel.setBackground(Color.PINK);
         canvasPanel.addMouseListener(new MouseListener() {
             public void mouseEntered(MouseEvent e) {
@@ -80,8 +80,7 @@ public class GraphPanel extends JPanel {
                 repaint();
             }
         });
-        canvas = new JScrollPane(canvasPanel);
-        panel.add(canvas);
+        panel.add(canvasPanel);
         return panel;
     }
 
