@@ -13,11 +13,12 @@ public class Window extends JFrame {
     private JPanel algorithm;
     private JPanel data;
 
-    private ButtonPanel buttons;
-    private AdjustmentsPanel adjustments;
-    private GraphPanel display;
+    ButtonPanel buttons;
+    AdjustmentsPanel adjustments;
+    GraphPanel display;
 
-    protected boolean input = false;
+    protected Graph g;
+    protected int tool;
 
     public Window() {
         super("Floyd-Warshall Algorithm Visualization");

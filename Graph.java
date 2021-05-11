@@ -107,7 +107,7 @@ public class Graph {
         }
     }
 
-    public void addVertex(String name) {
+    public void addVertex(String name, int x, int y) {
         // If there are no existing vertices
         if (vertices == null || vertices.size() == 0) {
             vertices = new ArrayList<Vertex>();
@@ -144,7 +144,7 @@ public class Graph {
             }
         }
 
-        Vertex newVertex = new Vertex(name);
+        Vertex newVertex = new Vertex(name, x, y);
         vertices.add(newVertex);
         zeroInDegreeVertices.add(newVertex);
     }

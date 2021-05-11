@@ -77,7 +77,8 @@ public class ButtonPanel extends JPanel {
 
         inputVertex.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                window.input = true;
+                window.tool = 2;
+                window.g = new Graph(true);
             }
         });
 
@@ -88,19 +89,16 @@ public class ButtonPanel extends JPanel {
 
         removeVertex.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                window.input = false;
             }
         });
 
         removeEdge.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                window.input = false;
             }
         });
 
         start.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                window.input = false;
             }
         });
 

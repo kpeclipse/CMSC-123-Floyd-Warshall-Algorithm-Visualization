@@ -40,7 +40,7 @@ public class GraphReader {
                 }
 
                 if (readVertex) {
-                    g.addVertex(line);
+                    g.addVertex(line, 10, 10);
                     numberOfVertices = g.vertices.size();
                 }
 

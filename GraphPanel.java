@@ -1,6 +1,5 @@
 import java.awt.Color;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import java.awt.Dimension;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 import java.awt.Font;
@@ -9,28 +8,51 @@ import java.awt.Graphics;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.text.AttributeSet.ColorAttribute;
+import javax.swing.JScrollPane;
 
 public class GraphPanel extends JPanel {
     private Window window;
+    private JScrollPane canvas;
+    private JPanel canvasPanel;
 
     public GraphPanel(Window w) {
         window = w;
         setLayout(null);
-        setBackground(Color.WHITE);
-
-        setMouseListener();
+        add(setCanvasPanel(w.display.getSize()));
+        setSize(w.display.getWidth(), w.display.getHeight());
     }
 
-    public void setMouseListener() {
-        addMouseListener(new MouseListener() {
-            public void mouseEntered(MouseEvent e) {
-                if (!window.input) {
-                    setBackground(Color.WHITE);
+    public JPanel setCanvasPanel(Dimension size) {
+        JPanel panel = new JPanel();
+        canvasPanel = new JPanel() {
+            @Override
+            public void paintComponent(Graphics g) {
+                paintComponent(g);
+                int endX = 520, endY = 695;
+                if (window.g.vertices != null) {
+                    for (int i = 0; i < window.g.vertices.size(); i++) {
+                        if (window.g.vertices.get(i).getX() > endX)
+                            endX = window.g.vertices.get(i).getX();
+                        if (window.g.vertices.get(i).getY() > endY)
+                            endY = window.g.vertices.get(i).getY();
+
+                        g.setColor(Color.PINK);
+                        g.fillOval(window.g.vertices.get(i).getX() - 15, window.g.vertices.get(i).getY() - 15, 30, 30);
+                        g.setColor(Color.BLACK);
+                        g.drawString(window.g.vertices.get(i).key, window.g.vertices.get(i).getX() + 15,
+                                window.g.vertices.get(i).getY() - 5);
+                    }
+
+                    canvasPanel.setPreferredSize(new Dimension(endX + 30, endX + 30));
+                    updateUI();
                 }
+            }
+        };
+        canvasPanel.setBackground(Color.PINK);
+        canvasPanel.addMouseListener(new MouseListener() {
+            public void mouseEntered(MouseEvent e) {
             }
 
             public void mouseExited(MouseEvent e) {
@@ -40,28 +62,27 @@ public class GraphPanel extends JPanel {
             }
 
             public void mouseClicked(MouseEvent e) {
-                if (window.input) {
-                    /*
-                     * Node node = new Node("name"); NodeDrawing draw = new NodeDrawing(node);
-                     * 
-                     * draw.setLocation(e.getX(), e.getY());
-                     */
-                    JLabel draw = new JLabel();
-                    draw.setBackground(Color.PINK);
-                    draw.setSize(30, 30);
-                    draw.setLocation(e.getX(), e.getY());
-                    draw.setVisible(true);
-
-                    add(draw);
-                    revalidate();
-                    repaint();
-
-                }
             }
 
             public void mousePressed(MouseEvent e) {
+                if (window.tool == 2) {
+                    String element = null;
+                    element = JOptionPane.showInputDialog("Insert Key");
+                    System.out.println(element);
+                    if (element != null) {
+                        if (window.g != null)
+                            window.g = new Graph(true);
+                        window.g.addVertex(element, e.getX(), e.getY());
+                    }
+                }
+
+                revalidate();
+                repaint();
             }
         });
+        canvas = new JScrollPane(canvasPanel);
+        panel.add(canvas);
+        return panel;
     }
 
     // What font to use
