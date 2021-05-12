@@ -11,11 +11,11 @@ public class Window extends JFrame {
     protected static int width = 1200, height = 725;
 
     private JPanel algorithm;
-    private JPanel data;
 
     ButtonPanel buttons;
     AdjustmentsPanel adjustments;
     GraphPanel display;
+    ResultPanel data;
 
     protected Graph graph;
     protected int tool;
@@ -38,24 +38,26 @@ public class Window extends JFrame {
     }
 
     public void setPanels() {
-        //setting the buttonspanel, simulation adjustments panel, and graph display panel
+        // setting the buttonspanel, simulation adjustments panel, and graph display
+        // panel
         buttons = new ButtonPanel(this);
         adjustments = new AdjustmentsPanel(this);
         display = new GraphPanel(this);
+        data = new ResultPanel(this);
 
-        //setting the algorithm and data view
-        algorithm = setPanel(0, 0, 400, 425, Color.BLACK, "algorithm");
-        data = setPanel(0, 425, 400, 300, Color.BLUE, "data");
+        // setting the algorithm view
+        algorithm = setPanel(0, 425, 400, 300, Color.BLUE, "data");
 
         buttons.setBounds(950, 0, 250, 300);
         adjustments.setBounds(950, 300, 250, 425);
         display.setBounds(400, 0, 550, height);
+        data.setBounds(0, 0, 400, 425);
 
         add(buttons);
         add(adjustments);
         add(display);
-        add(algorithm);
         add(data);
+        add(algorithm);
     }
 
     // JPanel Settings

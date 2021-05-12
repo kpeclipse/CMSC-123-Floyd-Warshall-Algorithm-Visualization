@@ -5,11 +5,12 @@ public class FloydWarshall {
     int V;
     double MAX = Double.POSITIVE_INFINITY;
 
-    public static void main(String[] args) {
-        GraphReader read = new GraphReader(new File(System.getProperty("user.dir") + "/graph.txt"));
-        Graph g = read.g;
-        new FloydWarshall(g);
-    }
+    // public static void main(String[] args) {
+    // GraphReader read = new GraphReader(new File(System.getProperty("user.dir") +
+    // "/graph.txt"));
+    // Graph g = read.g;
+    // new FloydWarshall(g);
+    // }
 
     public FloydWarshall(Graph G) {
         V = G.vertices.size();
@@ -30,7 +31,7 @@ public class FloydWarshall {
                 }
         }
 
-        showMatrix();
+        // showMatrix();
     }
 
     public void initialize(double[][] wGraph) {

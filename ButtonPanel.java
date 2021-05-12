@@ -8,6 +8,8 @@ import java.awt.FontFormatException;
 import java.awt.GridLayout;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -21,18 +23,19 @@ public class ButtonPanel extends JPanel {
     private JButton removeEdge;
     private JButton adjust;
     private JButton start;
+    private JButton reset;
 
     public ButtonPanel(Window w) {
         window = w;
-        
-        setLayout(new GridLayout(7, 1));
+
+        setLayout(new GridLayout(8, 1));
         setBackground(Color.BLACK);
 
         setButtons();
         setActionAndMouseListeners();
     }
 
-    //Initialize buttons
+    // Initialize buttons
     public void setButtons() {
         adjust = setButton("ADJUST", useFont(System.getProperty("user.dir") + "/resources/BebasNeue-Regular.ttf", 20));
         inputGraph = setButton("INPUT GRAPH",
@@ -46,6 +49,7 @@ public class ButtonPanel extends JPanel {
         removeEdge = setButton("REMOVE EDGE",
                 useFont(System.getProperty("user.dir") + "/resources/BebasNeue-Regular.ttf", 20));
         start = setButton("START", useFont(System.getProperty("user.dir") + "/resources/BebasNeue-Regular.ttf", 20));
+        reset = setButton("RESET", useFont(System.getProperty("user.dir") + "/resources/BebasNeue-Regular.ttf", 20));
 
         add(adjust);
         add(inputGraph);
@@ -54,6 +58,7 @@ public class ButtonPanel extends JPanel {
         add(removeVertex);
         add(removeEdge);
         add(start);
+        add(reset);
     }
 
     // JButton Settings
@@ -79,15 +84,20 @@ public class ButtonPanel extends JPanel {
 
         inputVertex.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
                 window.tool = 2;
-                //creates a directed graph
-                window.graph = new Graph(true);
+                // creates a directed graph
+                if (window.graph == null) // if in case user clicks button again and there is an existing graph
+                    window.graph = new Graph(true);
             }
         });
 
         inputEdge.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                window.tool = 3;
+                // creates a directed graph
+                // if in case graph has only one or no vertices
+                if (window.graph.edges == null && window.graph.vertices != null && window.graph.vertices.size() > 1)
+                    window.graph.edges = new ArrayList<Edge>();
             }
         });
 
@@ -103,6 +113,12 @@ public class ButtonPanel extends JPanel {
 
         start.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            }
+        });
+
+        reset.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                window.graph = null;
             }
         });
 
@@ -265,6 +281,30 @@ public class ButtonPanel extends JPanel {
             public void mouseReleased(MouseEvent e) {
                 start.setContentAreaFilled(false);
                 start.setForeground(Color.WHITE);
+            }
+
+            public void mouseClicked(MouseEvent e) {
+            }
+
+            public void mousePressed(MouseEvent e) {
+            }
+        });
+
+        reset.addMouseListener(new MouseListener() {
+            public void mouseEntered(MouseEvent e) {
+                reset.setForeground(Color.BLACK);
+                reset.setContentAreaFilled(true);
+                reset.setBackground(Color.WHITE);
+            }
+
+            public void mouseExited(MouseEvent e) {
+                reset.setForeground(Color.WHITE);
+                reset.setContentAreaFilled(false);
+            }
+
+            public void mouseReleased(MouseEvent e) {
+                reset.setContentAreaFilled(false);
+                reset.setForeground(Color.WHITE);
             }
 
             public void mouseClicked(MouseEvent e) {

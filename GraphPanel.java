@@ -1,5 +1,9 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.awt.Point;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 import java.awt.Font;
@@ -15,49 +19,71 @@ import javax.swing.JScrollPane;
 public class GraphPanel extends JPanel {
     private Window window;
     private JPanel canvasPanel;
+    private JScrollPane canvas;
+    private String first = null;
+    private String second = null;
 
     public GraphPanel(Window w) {
         window = w;
         setLayout(null);
-
-        setCanvasPanel();
+        add(setCanvasPanel());
     }
 
     public JPanel setCanvasPanel() {
         JPanel panel = new JPanel();
         panel.setSize(550, 725);
-        
-        //graphics component 
+
+        // graphics component
         canvasPanel = new JPanel() {
-            @Override
             public void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                g.setColor(Color.BLUE);
-                setSize(400,400);
-                
-                // int endX = 520, endY = 695;
+                setBounds(0, 0, 550, 725);
 
-                //if graph is not empty
-                // if (window.graph.vertices != null) {
-                //     for (int i = 0; i < window.graph.vertices.size(); i++) {
-                //         if (window.graph.vertices.get(i).getX() > endX)
-                //             endX = window.graph.vertices.get(i).getX();
-                //         if (window.graph.vertices.get(i).getY() > endY)
-                //             endY = window.graph.vertices.get(i).getY();
+                int endX = 520, endY = 695;
 
-                //         g.setColor(Color.PINK);
-                //         g.fillOval(window.graph.vertices.get(i).getX() - 15, window.graph.vertices.get(i).getY() - 15, 30, 30);
-                //         g.setColor(Color.BLACK);
-                //         g.drawString(window.graph.vertices.get(i).key, window.graph.vertices.get(i).getX() + 15,
-                //                 window.graph.vertices.get(i).getY() - 5);
-                //     }
+                // if graph is not empty
+                if (window.graph != null) {
+                    // DISPLAY VERTICES
+                    if (window.graph.vertices != null) {
+                        for (int i = 0; i < window.graph.vertices.size(); i++) {
+                            if (window.graph.vertices.get(i).getX() > endX)
+                                window.graph.vertices.get(i).setX(endX);
+                            if (window.graph.vertices.get(i).getY() > endY)
+                                window.graph.vertices.get(i).setY(endY);
 
-                //     canvasPanel.setPreferredSize(new Dimension(endX + 30, endX + 30));
-                //     updateUI();
-                // }
+                            g.setColor(Color.PINK);
+                            g.fillOval(window.graph.vertices.get(i).getX() - 15,
+                                    window.graph.vertices.get(i).getY() - 15, 30, 30);
+                            g.setColor(Color.BLACK);
+                            g.drawString(window.graph.vertices.get(i).key, window.graph.vertices.get(i).getX() - 10,
+                                    window.graph.vertices.get(i).getY() - 15);
+                        }
+                    }
+
+                    // DISPLAY EDGES
+                    if (window.graph.edges != null) {
+                        for (int i = 0; i < window.graph.edges.size(); i++) {
+                            g.setColor(Color.BLACK);
+
+                            if (window.graph.edges.get(i).first.equals(window.graph.edges.get(i).second))
+                                g.drawArc(window.graph.edges.get(i).first.getX() - 10,
+                                        window.graph.edges.get(i).first.getX() - 25, 20, 30, 0, 180);
+                            else
+                                g.drawLine(window.graph.edges.get(i).first.getX() + 15,
+                                        window.graph.edges.get(i).first.getY(),
+                                        window.graph.edges.get(i).second.getX() - 15,
+                                        window.graph.edges.get(i).second.getY());
+
+                            g.drawString(Double.toString(window.graph.edges.get(i).value),
+                                    window.graph.edges.get(i).first.getX() + 20,
+                                    window.graph.edges.get(i).first.getY());
+                        }
+                    }
+
+                    canvasPanel.setPreferredSize(new Dimension(endX + 30, endY + 30));
+                    updateUI();
+                }
             }
         };
-        panel.setBackground(Color.RED);
 
         canvasPanel.addMouseListener(new MouseListener() {
             public void mouseEntered(MouseEvent e) {
@@ -74,25 +100,82 @@ public class GraphPanel extends JPanel {
             }
 
             public void mousePressed(MouseEvent e) {
-                if (window.tool == 2) {
-                    String element = null;
+                switch (window.tool) {
+                    case 2:
+                        String element = null;
+                        boolean canAddVertex = true;
 
-                    element = JOptionPane.showInputDialog("Vertex Insert");
-                    System.out.println(element);
+                        element = JOptionPane.showInputDialog("Vertex Insert");
 
-                    if (element != null) {
-                        if (window.graph != null)
-                            window.graph = new Graph(true);
-                        window.graph.addVertex(element, e.getX(), e.getY());
-                    }
+                        if (element != null) {
+                            if (window.graph.vertices != null) {
+                                for (Vertex v : window.graph.vertices) { // check if vertex exists
+                                    if (v.key.equals(element)) {
+                                        JOptionPane.showMessageDialog(null, "VERTEX EXISTS");
+                                        canAddVertex = false;
+                                    }
+                                }
+                            }
+                            if (canAddVertex) {// if vertex is unique
+                                window.graph.addVertex(element, e.getX(), e.getY());
+                                window.data.floydWarshall = new FloydWarshall(window.graph);
+                            }
+                        }
+
+                        break;
+                    case 3:
+                        if (first == null) { // Choose first vertex
+                            first = checkVertex(e.getX(), e.getY());
+                        }
+
+                        else {
+                            boolean reset = false;
+                            boolean canAddEdge = true;
+                            second = checkVertex(e.getX(), e.getY()); // choose second vertex
+
+                            if (second != null) {
+                                for (Edge edge : window.graph.edges) { // check if edge exists
+                                    if (edge.first.key.equals(first) && edge.second.key.equals(second)) {
+                                        JOptionPane.showMessageDialog(null, "EDGE EXISTS");
+                                        canAddEdge = false;
+                                    }
+                                }
+
+                                if (canAddEdge) { // if edge is unique
+                                    String weight = JOptionPane.showInputDialog("Edge Weight"); // ask for weight
+                                    if (weight != null) {
+                                        window.graph.addEdge(first, second, Double.parseDouble(weight));
+                                        reset = true;
+                                    }
+                                }
+                            }
+
+                            else
+                                reset = true;
+
+                            if (reset) {
+                                first = null; // Allowed to look for first vertex again
+                                second = null;
+                            }
+                        }
+                        break;
                 }
 
                 revalidate();
                 repaint();
             }
         });
-        
-        add(panel);
+
+        canvas = new JScrollPane();
+        canvas.setBorder(null);
+
+        addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+                canvas.setBounds(0, 0, (int) e.getComponent().getWidth(), (int) e.getComponent().getHeight() - 98);
+            }
+        });
+
+        canvasPanel.add(canvas);
         panel.add(canvasPanel);
         return panel;
     }
@@ -104,6 +187,18 @@ public class GraphPanel extends JPanel {
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();
         }
+        return null;
+    }
+
+    // Check boundaries if user clicked on a vertex in canvas panel
+    private String checkVertex(int x, int y) {
+        for (int i = 0; i < window.graph.vertices.size(); i++) {
+            Rectangle boundaries = new Rectangle(window.graph.vertices.get(i).getX() - 15,
+                    window.graph.vertices.get(i).getY() - 15, 30, 30);
+            if (boundaries.contains(new Point(x, y)))
+                return window.graph.vertices.get(i).key;
+        }
+
         return null;
     }
 }

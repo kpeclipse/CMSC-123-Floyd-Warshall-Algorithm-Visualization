@@ -7,6 +7,8 @@ public class Graph {
     ArrayList<Vertex> zeroInDegreeVertices;
     boolean directed;
 
+    FloydWarshall floydWarshall;
+
     public Graph(boolean d) {
         // determine whether graph is directed or undirected
         directed = d;
