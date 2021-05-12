@@ -8,6 +8,7 @@ import java.io.IOException;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
 import javax.swing.JSlider;
 
 public class AdjustmentsPanel extends JPanel {
@@ -31,6 +32,7 @@ public class AdjustmentsPanel extends JPanel {
         dGraph.setContentAreaFilled(false);
         dGraph.setFocusPainted(false);
         dGraph.setBounds(10, 20, 150, 30);
+        
 
         uGraph = new JRadioButton("Undirected Graph");
         uGraph.setFont(useFont(System.getProperty("user.dir") + "/resources/BebasNeue-Regular.ttf", 20));
@@ -39,6 +41,10 @@ public class AdjustmentsPanel extends JPanel {
         uGraph.setFocusPainted(false);
         uGraph.setBounds(10, 50, 150, 30);
 
+        ButtonGroup G = new ButtonGroup();
+        G.add(dGraph);
+        G.add(uGraph);
+        dGraph.isSelected();
         add(dGraph);
         add(uGraph);
     }

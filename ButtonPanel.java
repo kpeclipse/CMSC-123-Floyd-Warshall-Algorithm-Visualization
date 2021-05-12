@@ -24,6 +24,7 @@ public class ButtonPanel extends JPanel {
 
     public ButtonPanel(Window w) {
         window = w;
+        
         setLayout(new GridLayout(7, 1));
         setBackground(Color.BLACK);
 
@@ -31,6 +32,7 @@ public class ButtonPanel extends JPanel {
         setActionAndMouseListeners();
     }
 
+    //Initialize buttons
     public void setButtons() {
         adjust = setButton("ADJUST", useFont(System.getProperty("user.dir") + "/resources/BebasNeue-Regular.ttf", 20));
         inputGraph = setButton("INPUT GRAPH",
@@ -77,8 +79,10 @@ public class ButtonPanel extends JPanel {
 
         inputVertex.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+
                 window.tool = 2;
-                window.g = new Graph(true);
+                //creates a directed graph
+                window.graph = new Graph(true);
             }
         });
 
@@ -99,6 +103,30 @@ public class ButtonPanel extends JPanel {
 
         start.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            }
+        });
+
+        adjust.addMouseListener(new MouseListener() {
+            public void mouseEntered(MouseEvent e) {
+                adjust.setForeground(Color.BLACK);
+                adjust.setContentAreaFilled(true);
+                adjust.setBackground(Color.WHITE);
+            }
+
+            public void mouseExited(MouseEvent e) {
+                adjust.setForeground(Color.WHITE);
+                adjust.setContentAreaFilled(false);
+            }
+
+            public void mouseReleased(MouseEvent e) {
+                adjust.setContentAreaFilled(false);
+                adjust.setForeground(Color.WHITE);
+            }
+
+            public void mouseClicked(MouseEvent e) {
+            }
+
+            public void mousePressed(MouseEvent e) {
             }
         });
 

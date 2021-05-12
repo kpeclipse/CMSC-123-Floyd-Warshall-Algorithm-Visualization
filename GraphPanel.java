@@ -18,41 +18,50 @@ public class GraphPanel extends JPanel {
 
     public GraphPanel(Window w) {
         window = w;
-        setSize(550, 725);
         setLayout(null);
-        add(setCanvasPanel());
+
+        setCanvasPanel();
     }
 
     public JPanel setCanvasPanel() {
         JPanel panel = new JPanel();
         panel.setSize(550, 725);
+        
+        //graphics component 
         canvasPanel = new JPanel() {
             @Override
             public void paintComponent(Graphics g) {
-                int endX = 520, endY = 695;
-                if (window.g.vertices != null) {
-                    for (int i = 0; i < window.g.vertices.size(); i++) {
-                        if (window.g.vertices.get(i).getX() > endX)
-                            endX = window.g.vertices.get(i).getX();
-                        if (window.g.vertices.get(i).getY() > endY)
-                            endY = window.g.vertices.get(i).getY();
+                super.paintComponent(g);
+                g.setColor(Color.BLUE);
+                setSize(400,400);
+                
+                // int endX = 520, endY = 695;
 
-                        g.setColor(Color.PINK);
-                        g.fillOval(window.g.vertices.get(i).getX() - 15, window.g.vertices.get(i).getY() - 15, 30, 30);
-                        g.setColor(Color.BLACK);
-                        g.drawString(window.g.vertices.get(i).key, window.g.vertices.get(i).getX() + 15,
-                                window.g.vertices.get(i).getY() - 5);
-                    }
+                //if graph is not empty
+                // if (window.graph.vertices != null) {
+                //     for (int i = 0; i < window.graph.vertices.size(); i++) {
+                //         if (window.graph.vertices.get(i).getX() > endX)
+                //             endX = window.graph.vertices.get(i).getX();
+                //         if (window.graph.vertices.get(i).getY() > endY)
+                //             endY = window.graph.vertices.get(i).getY();
 
-                    canvasPanel.setPreferredSize(new Dimension(endX + 30, endX + 30));
-                    updateUI();
-                }
+                //         g.setColor(Color.PINK);
+                //         g.fillOval(window.graph.vertices.get(i).getX() - 15, window.graph.vertices.get(i).getY() - 15, 30, 30);
+                //         g.setColor(Color.BLACK);
+                //         g.drawString(window.graph.vertices.get(i).key, window.graph.vertices.get(i).getX() + 15,
+                //                 window.graph.vertices.get(i).getY() - 5);
+                //     }
+
+                //     canvasPanel.setPreferredSize(new Dimension(endX + 30, endX + 30));
+                //     updateUI();
+                // }
             }
         };
+        panel.setBackground(Color.RED);
 
-        canvasPanel.setBackground(Color.PINK);
         canvasPanel.addMouseListener(new MouseListener() {
             public void mouseEntered(MouseEvent e) {
+
             }
 
             public void mouseExited(MouseEvent e) {
@@ -67,12 +76,14 @@ public class GraphPanel extends JPanel {
             public void mousePressed(MouseEvent e) {
                 if (window.tool == 2) {
                     String element = null;
-                    element = JOptionPane.showInputDialog("Insert Key");
+
+                    element = JOptionPane.showInputDialog("Vertex Insert");
                     System.out.println(element);
+
                     if (element != null) {
-                        if (window.g != null)
-                            window.g = new Graph(true);
-                        window.g.addVertex(element, e.getX(), e.getY());
+                        if (window.graph != null)
+                            window.graph = new Graph(true);
+                        window.graph.addVertex(element, e.getX(), e.getY());
                     }
                 }
 
@@ -80,6 +91,8 @@ public class GraphPanel extends JPanel {
                 repaint();
             }
         });
+        
+        add(panel);
         panel.add(canvasPanel);
         return panel;
     }

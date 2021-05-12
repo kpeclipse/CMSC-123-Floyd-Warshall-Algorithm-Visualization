@@ -17,7 +17,7 @@ public class Window extends JFrame {
     AdjustmentsPanel adjustments;
     GraphPanel display;
 
-    protected Graph g;
+    protected Graph graph;
     protected int tool;
 
     public Window() {
@@ -38,15 +38,19 @@ public class Window extends JFrame {
     }
 
     public void setPanels() {
+        //setting the buttonspanel, simulation adjustments panel, and graph display panel
         buttons = new ButtonPanel(this);
         adjustments = new AdjustmentsPanel(this);
         display = new GraphPanel(this);
+
+        //setting the algorithm and data view
         algorithm = setPanel(0, 0, 400, 425, Color.BLACK, "algorithm");
         data = setPanel(0, 425, 400, 300, Color.BLUE, "data");
 
         buttons.setBounds(950, 0, 250, 300);
         adjustments.setBounds(950, 300, 250, 425);
-        display.setLocation(400, 0);
+        display.setBounds(400, 0, 550, height);
+
         add(buttons);
         add(adjustments);
         add(display);
