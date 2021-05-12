@@ -12,9 +12,12 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.filechooser.*;
+import javax.swing.JFileChooser;
 
 public class ButtonPanel extends JPanel {
     private Window window;
+    GraphReader readg;
 
     private JButton inputGraph;
     private JButton inputVertex;
@@ -79,6 +82,20 @@ public class ButtonPanel extends JPanel {
 
         inputGraph.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                //opens jfile chooser to parse graph
+                JFileChooser j = new JFileChooser();
+
+                j.setAcceptAllFileFilterUsed(false);
+                j.setDialogTitle("Select a .txt file");
+ 
+                // only allow files of .txt extension
+                FileNameExtensionFilter restrict = new FileNameExtensionFilter("Only .txt files", "txt");
+                j.addChoosableFileFilter(restrict);
+                j.showOpenDialog(null);
+                File graphFile = j.getSelectedFile();
+
+                readg = new GraphReader(graphFile);
+
             }
         });
 

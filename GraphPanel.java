@@ -142,11 +142,20 @@ public class GraphPanel extends JPanel {
                                 }
 
                                 if (canAddEdge) { // if edge is unique
-                                    String weight = JOptionPane.showInputDialog("Edge Weight"); // ask for weight
-                                    if (weight != null) {
-                                        window.graph.addEdge(first, second, Double.parseDouble(weight));
-                                        reset = true;
+                                    String weight;
+                                    boolean isEmpty = true;
+                                    while (isEmpty)
+                                    {
+                                        weight = JOptionPane.showInputDialog("Edge Weight"); // ask for weight
+                                        if (weight != null) {
+                                            window.graph.addEdge(first, second, Double.parseDouble(weight));
+                                            isEmpty = false;
+                                            reset = true;
+                                        }
+                                        else if (weight == null) {isEmpty = false;}
+                                        else {JOptionPane.showMessageDialog(null, "INPUT EDGE WEIGHT");}
                                     }
+                                    
                                 }
                             }
 

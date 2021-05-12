@@ -196,7 +196,7 @@ public class Graph {
             }
         }
     }
-
+    
     public void defaultMatrix() {
         weights = new double[vertices.size()][vertices.size()];
         for (int i = 0; i < vertices.size(); i++)

@@ -30,9 +30,12 @@ public class ResultPanel extends JPanel {
                     g.setColor(Color.BLACK);
                     for (int i = 0; i < window.graph.vertices.size(); i++) {
                         tableStartX = 50;
-                        g.drawRect(tableStartX, tableStartY, 50, 50);
+                        // g.drawRect(tableStartX, tableStartY, 50, 50);
+
                         for (int j = 1; j < window.graph.vertices.size(); j++) {
-                            g.drawRect(tableStartX + 50, tableStartY, 50, 50);
+                            // g.drawRect(tableStartX + 50, tableStartY, 50, 50);
+                            g.drawString(window.graph.vertices.get(i).key, tableStartX, tableStartY);
+                            g.drawString(window.graph.vertices.get(i).key, tableStartY, tableStartX);
                             tableStartX += 50;
                         }
                         tableStartY += 50;
