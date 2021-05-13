@@ -128,34 +128,34 @@ public class GraphPanel extends JPanel {
                             first = checkVertex(e.getX(), e.getY());
                         }
 
-                        else {
+                        else { // First vertex chosen
                             boolean reset = false;
                             boolean canAddEdge = true;
                             second = checkVertex(e.getX(), e.getY()); // choose second vertex
 
-                            if (second != null) {
+                            if (second != null) { // Two vertices chosen
                                 for (Edge edge : window.graph.edges) { // check if edge exists
                                     if (edge.first.key.equals(first) && edge.second.key.equals(second)) {
                                         JOptionPane.showMessageDialog(null, "EDGE EXISTS");
                                         canAddEdge = false;
+                                        break;
                                     }
                                 }
 
                                 if (canAddEdge) { // if edge is unique
                                     String weight;
-                                    boolean isEmpty = true;
-                                    while (isEmpty)
-                                    {
-                                        weight = JOptionPane.showInputDialog("Edge Weight"); // ask for weight
-                                        if (weight != null) {
+
+                                    // Ask for weight
+                                    try {
+                                        weight = JOptionPane.showInputDialog("Edge Weight");
+                                        if (weight != null) // In case user clicks "Cancel"
                                             window.graph.addEdge(first, second, Double.parseDouble(weight));
-                                            isEmpty = false;
-                                            reset = true;
-                                        }
-                                        else if (weight == null) {isEmpty = false;}
-                                        else {JOptionPane.showMessageDialog(null, "INPUT EDGE WEIGHT");}
+
+                                    } catch (NumberFormatException error) { // In case weight is not double
+                                        JOptionPane.showMessageDialog(null, "INVALID WEIGHT");
                                     }
-                                    
+
+                                    reset = true;
                                 }
                             }
 

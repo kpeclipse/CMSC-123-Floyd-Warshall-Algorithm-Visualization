@@ -82,12 +82,12 @@ public class ButtonPanel extends JPanel {
 
         inputGraph.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                //opens jfile chooser to parse graph
+                // opens jfile chooser to parse graph
                 JFileChooser j = new JFileChooser();
 
                 j.setAcceptAllFileFilterUsed(false);
                 j.setDialogTitle("Select a .txt file");
- 
+
                 // only allow files of .txt extension
                 FileNameExtensionFilter restrict = new FileNameExtensionFilter("Only .txt files", "txt");
                 j.addChoosableFileFilter(restrict);
@@ -113,7 +113,8 @@ public class ButtonPanel extends JPanel {
                 window.tool = 3;
                 // creates a directed graph
                 // if in case graph has only one or no vertices
-                if (window.graph.edges == null && window.graph.vertices != null && window.graph.vertices.size() > 1)
+                if (window.graph != null && window.graph.vertices != null && window.graph.vertices.size() > 1
+                        && window.graph.edges == null)
                     window.graph.edges = new ArrayList<Edge>();
             }
         });
