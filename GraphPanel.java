@@ -67,15 +67,26 @@ public class GraphPanel extends JPanel {
                             if (window.graph.edges.get(i).first.equals(window.graph.edges.get(i).second))
                                 g.drawArc(window.graph.edges.get(i).first.getX() - 10,
                                         window.graph.edges.get(i).first.getX() - 25, 20, 30, 0, 180);
-                            else
-                                g.drawLine(window.graph.edges.get(i).first.getX() + 15,
-                                        window.graph.edges.get(i).first.getY(),
+                            else{
+                                if (!window.graph.directed)
+                                {
+                                    g.drawLine(window.graph.edges.get(i).first.getX() + 15,
+                                    window.graph.edges.get(i).first.getY(),
+                                    window.graph.edges.get(i).second.getX() - 15,
+                                    window.graph.edges.get(i).second.getY());
+                                }
+                                else 
+                                    drawArrowLine(g, 
+                                        window.graph.edges.get(i).first.getX() + 15,
+                                        window.graph.edges.get(i).first.getY(), 
                                         window.graph.edges.get(i).second.getX() - 15,
-                                        window.graph.edges.get(i).second.getY());
-
+                                        window.graph.edges.get(i).second.getY(),
+                                        5, 5);
+                            }
+                                
                             g.drawString(Double.toString(window.graph.edges.get(i).value),
-                                    window.graph.edges.get(i).first.getX() + 20,
-                                    window.graph.edges.get(i).first.getY());
+                                    (window.graph.edges.get(i).first.getX()+window.graph.edges.get(i).second.getX())/2,
+                                    (window.graph.edges.get(i).first.getY()+window.graph.edges.get(i).second.getY())/2 );
                         }
                     }
 
@@ -101,6 +112,7 @@ public class GraphPanel extends JPanel {
 
             public void mousePressed(MouseEvent e) {
                 switch (window.tool) {
+                    //ADDING A VERTEX
                     case 2:
                         String element = null;
                         boolean canAddVertex = true;
@@ -123,6 +135,7 @@ public class GraphPanel extends JPanel {
                         }
 
                         break;
+                    //ADDING AN EDGE
                     case 3:
                         if (first == null) { // Choose first vertex
                             first = checkVertex(e.getX(), e.getY());
@@ -197,6 +210,28 @@ public class GraphPanel extends JPanel {
             e.printStackTrace();
         }
         return null;
+    }
+
+    //method to draw a directed arrowline
+    private void drawArrowLine(Graphics g, int x1, int y1, int x2, int y2, int d, int h) {
+        int dx = x2 - x1, dy = y2 - y1;
+        double D = Math.sqrt(dx*dx + dy*dy);
+        double xm = D - d, xn = xm, ym = h, yn = -h, x;
+        double sin = dy / D, cos = dx / D;
+    
+        x = xm*cos - ym*sin + x1;
+        ym = xm*sin + ym*cos + y1;
+        xm = x;
+    
+        x = xn*cos - yn*sin + x1;
+        yn = xn*sin + yn*cos + y1;
+        xn = x;
+    
+        int[] xpoints = {x2, (int) xm, (int) xn};
+        int[] ypoints = {y2, (int) ym, (int) yn};
+    
+        g.drawLine(x1, y1, x2, y2);
+        g.fillPolygon(xpoints, ypoints, 3);
     }
 
     // Check boundaries if user clicked on a vertex in canvas panel

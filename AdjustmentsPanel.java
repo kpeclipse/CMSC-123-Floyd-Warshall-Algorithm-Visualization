@@ -13,8 +13,8 @@ import javax.swing.JSlider;
 
 public class AdjustmentsPanel extends JPanel {
     private Window window;
-    private JRadioButton dGraph;
-    private JRadioButton uGraph;
+    public JRadioButton dGraph;
+    public JRadioButton uGraph;
 
     public AdjustmentsPanel(Window w) {
         window = w;
@@ -33,20 +33,21 @@ public class AdjustmentsPanel extends JPanel {
         dGraph.setFocusPainted(false);
         dGraph.setBounds(10, 20, 150, 30);
         
-
         uGraph = new JRadioButton("Undirected Graph");
         uGraph.setFont(useFont(System.getProperty("user.dir") + "/resources/BebasNeue-Regular.ttf", 20));
         uGraph.setForeground(Color.WHITE);
         uGraph.setContentAreaFilled(false);
         uGraph.setFocusPainted(false);
         uGraph.setBounds(10, 50, 150, 30);
+        dGraph.isSelected();
 
         ButtonGroup G = new ButtonGroup();
         G.add(dGraph);
         G.add(uGraph);
-        dGraph.isSelected();
+        
         add(dGraph);
         add(uGraph);
+        dGraph.setSelected(true);
     }
 
     private void setSimulationSpeed() {

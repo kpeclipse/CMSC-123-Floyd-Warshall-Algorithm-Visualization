@@ -1,13 +1,21 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.Scrollable;
 
-public class ResultPanel extends JPanel {
+
+public class ResultPanel extends JPanel{
     private Window window;
     private JPanel tablePanel;
-    FloydWarshall floydWarshall;
+    public FloydWarshall floydWarshall;
+    private JScrollPane scrollPane;
 
     public ResultPanel(Window w) {
         window = w;
@@ -15,7 +23,7 @@ public class ResultPanel extends JPanel {
         add(setTablePanel());
     }
 
-    public JPanel setTablePanel() {
+    public JPanel setTablePanel(){
         JPanel panel = new JPanel();
         panel.setSize(400, 425);
 
@@ -54,13 +62,18 @@ public class ResultPanel extends JPanel {
                 // tableStartY += 10;
                 // }
                 // }
+
                 tablePanel.setPreferredSize(new Dimension(endX + 30, endY + 30));
+                
                 updateUI();
             }
         };
-
-        panel.add(tablePanel);
+        scrollPane = new JScrollPane(tablePanel,   JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setSize(400, 425);
+        
+        panel.add(scrollPane);
         return panel;
     }
+
 
 }

@@ -69,6 +69,18 @@ public class Window extends JFrame {
         return thePanel;
     }
 
+    public boolean isDirected()
+    {
+        if (adjustments.dGraph.isSelected()){
+            return true;
+        }
+        else if (adjustments.uGraph.isSelected()){
+            return false;
+        }
+        else
+            return true;
+    }
+
     // What font to use
     public Font useFont(String path, int size) {
         try {

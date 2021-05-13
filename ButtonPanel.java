@@ -17,7 +17,8 @@ import javax.swing.JFileChooser;
 
 public class ButtonPanel extends JPanel {
     private Window window;
-    GraphReader readg;
+    private GraphReader readg;
+    private AdjustmentsPanel adjustments;
 
     private JButton inputGraph;
     private JButton inputVertex;
@@ -84,17 +85,20 @@ public class ButtonPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 // opens jfile chooser to parse graph
                 JFileChooser j = new JFileChooser();
-
-                j.setAcceptAllFileFilterUsed(false);
-                j.setDialogTitle("Select a .txt file");
+                
 
                 // only allow files of .txt extension
+                j.setAcceptAllFileFilterUsed(false);
+                j.setDialogTitle("Select a .txt file");
                 FileNameExtensionFilter restrict = new FileNameExtensionFilter("Only .txt files", "txt");
                 j.addChoosableFileFilter(restrict);
                 j.showOpenDialog(null);
+
                 File graphFile = j.getSelectedFile();
 
+                // creates readgraph object and sets the window graph to the graph in that object
                 readg = new GraphReader(graphFile);
+                window.graph = readg.g;
 
             }
         });
@@ -104,7 +108,13 @@ public class ButtonPanel extends JPanel {
                 window.tool = 2;
                 // creates a directed graph
                 if (window.graph == null) // if in case user clicks button again and there is an existing graph
-                    window.graph = new Graph(true);
+                    // window.graph = new Graph(true);
+                    if (window.isDirected())
+                    {
+                        window.graph = new Graph(true);
+                    }
+                    else
+                        window.graph = new Graph(false);
             }
         });
 
