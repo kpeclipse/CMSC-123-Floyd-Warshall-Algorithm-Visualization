@@ -68,10 +68,11 @@ public class ResultPanel extends JPanel{
                 updateUI();
             }
         };
-        scrollPane = new JScrollPane(tablePanel,   JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setSize(400, 425);
+        // scrollPane = new JScrollPane(tablePanel,   JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        // scrollPane.setSize(400, 425);
         
-        panel.add(scrollPane);
+        // panel.add(scrollPane);
+        panel.add(tablePanel);
         return panel;
     }
 
