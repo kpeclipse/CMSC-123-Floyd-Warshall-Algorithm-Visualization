@@ -1,20 +1,13 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.io.File;
-import java.io.IOException;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.Scrollable;
 
-
-public class ResultPanel extends JPanel{
+public class ResultPanel extends JPanel {
     private Window window;
     private JPanel tablePanel;
-    public FloydWarshall floydWarshall;
     private JScrollPane scrollPane;
 
     public ResultPanel(Window w) {
@@ -23,7 +16,7 @@ public class ResultPanel extends JPanel{
         add(setTablePanel());
     }
 
-    public JPanel setTablePanel(){
+    public JPanel setTablePanel() {
         JPanel panel = new JPanel();
         panel.setSize(400, 425);
 
@@ -33,22 +26,30 @@ public class ResultPanel extends JPanel{
 
                 int endX = 400, endY = 425;
                 int tableStartX = 50, tableStartY = 30;
-                int labelStartX = tableStartX + 20;
+                int labelStartX = tableStartX + 20, labelStartY = tableStartY + 30;
+                int valueStartX = 60, valueStartY = 55;
 
                 if (window.graph != null && window.graph.vertices != null) {
                     g.setColor(Color.BLACK);
                     for (int i = 0; i < window.graph.vertices.size(); i++) {
                         tableStartX = 50;
+                        valueStartY = 55;
                         g.drawRect(tableStartX, tableStartY, 50, 50);
                         g.drawString(window.graph.vertices.get(i).key, labelStartX, 20);
-                        g.drawString(window.graph.vertices.get(i).key, 20, labelStartX);
+                        g.drawString(window.graph.vertices.get(i).key, 20, labelStartY);
+                        g.drawString(Double.toString(window.floydWarshall.dist[0][i]), valueStartX, valueStartY);
 
                         for (int j = 1; j < window.graph.vertices.size(); j++) {
+                            valueStartY += 55;
                             g.drawRect(tableStartX + 50, tableStartY, 50, 50);
+                            g.drawString(Double.toString(window.floydWarshall.dist[j][i]), valueStartX, valueStartY);
                             tableStartX += 50;
                         }
+
                         tableStartY += 50;
                         labelStartX += 50;
+                        labelStartY += 50;
+                        valueStartX += 50;
                     }
                 }
 
@@ -64,17 +65,17 @@ public class ResultPanel extends JPanel{
                 // }
 
                 tablePanel.setPreferredSize(new Dimension(endX + 30, endY + 30));
-                
+
                 updateUI();
             }
         };
-        // scrollPane = new JScrollPane(tablePanel,   JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        // scrollPane = new JScrollPane(tablePanel,
+        // JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+        // JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         // scrollPane.setSize(400, 425);
-        
+
         // panel.add(scrollPane);
         panel.add(tablePanel);
         return panel;
     }
-
-
 }

@@ -8,9 +8,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class Window extends JFrame {
-    protected static int width = 1200, height = 725;
+    private static int width = 1200, height = 725;
 
     private JPanel algorithm;
+    private int tool;
 
     ButtonPanel buttons;
     AdjustmentsPanel adjustments;
@@ -18,7 +19,7 @@ public class Window extends JFrame {
     ResultPanel data;
 
     protected Graph graph;
-    protected int tool;
+    protected FloydWarshall floydWarshall;
 
     public Window() {
         super("Floyd-Warshall Algorithm Visualization");
@@ -69,16 +70,21 @@ public class Window extends JFrame {
         return thePanel;
     }
 
-    public boolean isDirected()
-    {
-        if (adjustments.dGraph.isSelected()){
+    public boolean isDirected() {
+        if (adjustments.dGraph.isSelected()) {
             return true;
-        }
-        else if (adjustments.uGraph.isSelected()){
+        } else if (adjustments.uGraph.isSelected()) {
             return false;
-        }
-        else
+        } else
             return true;
+    }
+
+    public void setTool(int t) {
+        tool = t;
+    }
+
+    public int getTool() {
+        return tool;
     }
 
     // What font to use

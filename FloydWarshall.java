@@ -1,6 +1,7 @@
 import java.io.File;
 
 public class FloydWarshall {
+    Graph g;
     double[][] dist;
     int V;
     double MAX = Double.POSITIVE_INFINITY;
@@ -13,7 +14,8 @@ public class FloydWarshall {
     // }
 
     public FloydWarshall(Graph G) {
-        V = G.vertices.size();
+        g = G;
+        V = g.vertices.size();
         dist = new double[V][V];
 
         initialize(G.weights);

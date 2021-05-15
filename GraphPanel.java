@@ -23,6 +23,9 @@ public class GraphPanel extends JPanel {
     private String first = null;
     private String second = null;
 
+    private int startX = 50, startY = 50;
+    private int endX = 520, endY = 695;
+
     public GraphPanel(Window w) {
         window = w;
         setLayout(null);
@@ -38,17 +41,11 @@ public class GraphPanel extends JPanel {
             public void paintComponent(Graphics g) {
                 setBounds(0, 0, 550, 725);
 
-                int endX = 520, endY = 695;
-
                 // if graph is not empty
                 if (window.graph != null) {
                     // DISPLAY VERTICES
                     if (window.graph.vertices != null) {
                         for (int i = 0; i < window.graph.vertices.size(); i++) {
-                            if (window.graph.vertices.get(i).getX() > endX)
-                                window.graph.vertices.get(i).setX(endX);
-                            if (window.graph.vertices.get(i).getY() > endY)
-                                window.graph.vertices.get(i).setY(endY);
 
                             g.setColor(Color.PINK);
                             g.fillOval(window.graph.vertices.get(i).getX() - 15,
@@ -64,29 +61,22 @@ public class GraphPanel extends JPanel {
                         for (int i = 0; i < window.graph.edges.size(); i++) {
                             g.setColor(Color.BLACK);
 
-                            if (window.graph.edges.get(i).first.equals(window.graph.edges.get(i).second))
-                                g.drawArc(window.graph.edges.get(i).first.getX() - 10,
-                                        window.graph.edges.get(i).first.getX() - 25, 20, 30, 0, 180);
-                            else{
-                                if (!window.graph.directed)
-                                {
-                                    g.drawLine(window.graph.edges.get(i).first.getX() + 15,
-                                    window.graph.edges.get(i).first.getY(),
-                                    window.graph.edges.get(i).second.getX() - 15,
-                                    window.graph.edges.get(i).second.getY());
-                                }
-                                else 
-                                    drawArrowLine(g, 
-                                        window.graph.edges.get(i).first.getX() + 15,
-                                        window.graph.edges.get(i).first.getY(), 
+                            if (!window.graph.directed) { // If graph is undirected
+                                g.drawLine(window.graph.edges.get(i).first.getX() + 15,
+                                        window.graph.edges.get(i).first.getY(),
                                         window.graph.edges.get(i).second.getX() - 15,
-                                        window.graph.edges.get(i).second.getY(),
-                                        5, 5);
-                            }
-                                
+                                        window.graph.edges.get(i).second.getY());
+                            } else // If graph is directed
+                                drawArrowLine(g, window.graph.edges.get(i).first.getX() + 15,
+                                        window.graph.edges.get(i).first.getY(),
+                                        window.graph.edges.get(i).second.getX() - 15,
+                                        window.graph.edges.get(i).second.getY(), 5, 5);
+
                             g.drawString(Double.toString(window.graph.edges.get(i).value),
-                                    (window.graph.edges.get(i).first.getX()+window.graph.edges.get(i).second.getX())/2,
-                                    (window.graph.edges.get(i).first.getY()+window.graph.edges.get(i).second.getY())/2 );
+                                    (window.graph.edges.get(i).first.getX() + window.graph.edges.get(i).second.getX())
+                                            / 2,
+                                    (window.graph.edges.get(i).first.getY() + window.graph.edges.get(i).second.getY())
+                                            / 2);
                         }
                     }
 
@@ -111,78 +101,162 @@ public class GraphPanel extends JPanel {
             }
 
             public void mousePressed(MouseEvent e) {
-                switch (window.tool) {
-                    //ADDING A VERTEX
-                    case 2:
-                        String element = null;
-                        boolean canAddVertex = true;
+                if (window.graph != null) {
+                    switch (window.getTool()) {
+                        // ADDING A VERTEX
+                        case 2:
+                            String element = null;
+                            boolean canAddVertex = true;
 
-                        element = JOptionPane.showInputDialog("Vertex Insert");
+                            element = checkVertex(e.getX(), e.getY());
 
-                        if (element != null) {
-                            if (window.graph.vertices != null) {
-                                for (Vertex v : window.graph.vertices) { // check if vertex exists
-                                    if (v.key.equals(element)) {
-                                        JOptionPane.showMessageDialog(null, "VERTEX EXISTS");
-                                        canAddVertex = false;
+                            if (element == null) { // check if there is no overlapping vertex
+                                do {
+                                    element = JOptionPane.showInputDialog("Vertex Name (Max: 3)");
+                                } while (element.length() > 3); // 3 characters only
+
+                                if (element != null) {
+                                    if (window.graph.vertices != null) {
+                                        for (Vertex v : window.graph.vertices) { // check if vertex exists
+                                            if (v.key.equals(element)) {
+                                                JOptionPane.showMessageDialog(null, "VERTEX EXISTS");
+                                                canAddVertex = false;
+                                            }
+                                        }
+                                    }
+                                    if (canAddVertex) {// if vertex is unique
+                                        int x = e.getX(), y = e.getY();
+                                        if (x < startX)
+                                            x = 30;
+                                        if (y < startY)
+                                            y = 30;
+                                        window.graph.addVertex(element, x, y);
                                     }
                                 }
                             }
-                            if (canAddVertex) {// if vertex is unique
-                                window.graph.addVertex(element, e.getX(), e.getY());
-                                window.data.floydWarshall = new FloydWarshall(window.graph);
+
+                            break;
+
+                        // ADDING AN EDGE
+                        case 3:
+                            if (first == null) { // Choose first vertex
+                                first = checkVertex(e.getX(), e.getY());
                             }
-                        }
 
-                        break;
-                    //ADDING AN EDGE
-                    case 3:
-                        if (first == null) { // Choose first vertex
-                            first = checkVertex(e.getX(), e.getY());
-                        }
+                            else { // First vertex chosen
+                                boolean reset = false;
+                                boolean canAddEdge = true;
+                                second = checkVertex(e.getX(), e.getY()); // choose second vertex
 
-                        else { // First vertex chosen
-                            boolean reset = false;
-                            boolean canAddEdge = true;
-                            second = checkVertex(e.getX(), e.getY()); // choose second vertex
-
-                            if (second != null) { // Two vertices chosen
-                                for (Edge edge : window.graph.edges) { // check if edge exists
-                                    if (edge.first.key.equals(first) && edge.second.key.equals(second)) {
-                                        JOptionPane.showMessageDialog(null, "EDGE EXISTS");
+                                if (second != null) { // Two vertices chosen
+                                    reset = true;
+                                    if (first.equals(second)) { // If user attempts to create a loop
+                                        JOptionPane.showMessageDialog(null, "LOOP NOT ALLOWED");
                                         canAddEdge = false;
+                                    } else {
+                                        for (Edge edge : window.graph.edges) { // check if edge exists
+                                            if (edge.first.key.equals(first) && edge.second.key.equals(second)) {
+                                                JOptionPane.showMessageDialog(null, "EDGE EXISTS");
+                                                canAddEdge = false;
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    if (canAddEdge) { // if edge is unique
+                                        String weight;
+
+                                        // Ask for weight
+                                        try {
+                                            weight = JOptionPane.showInputDialog("Edge Weight");
+                                            if (weight != null) // In case user clicks "Cancel"
+                                                window.graph.addEdge(first, second, Double.parseDouble(weight));
+
+                                        } catch (NumberFormatException error) { // In case weight is not double
+                                            JOptionPane.showMessageDialog(null, "INVALID WEIGHT");
+                                        }
+                                    }
+                                }
+
+                                else
+                                    reset = true;
+
+                                if (reset) {
+                                    first = null; // Allowed to look for first vertex again
+                                    second = null;
+                                }
+                            }
+                            break;
+
+                        // Remove vertex
+                        case 4:
+                            String removeVertex = checkVertex(e.getX(), e.getY());
+                            if (removeVertex != null) {
+                                for (Vertex v : window.graph.vertices) {
+                                    if (v.key.equals(removeVertex)) {
+                                        window.graph.removeVertex(v);
+                                        if (window.graph.vertices.size() == 0) {
+                                            window.graph = null;
+                                            window.floydWarshall = null;
+                                        }
                                         break;
                                     }
                                 }
+                            }
+                            break;
 
-                                if (canAddEdge) { // if edge is unique
-                                    String weight;
+                        // Remove Edge
+                        case 5:
+                            if (window.graph.edges != null) {
+                                if (first == null) { // Choose first vertex
+                                    first = checkVertex(e.getX(), e.getY());
+                                }
 
-                                    // Ask for weight
-                                    try {
-                                        weight = JOptionPane.showInputDialog("Edge Weight");
-                                        if (weight != null) // In case user clicks "Cancel"
-                                            window.graph.addEdge(first, second, Double.parseDouble(weight));
+                                else { // First vertex chosen
+                                    boolean reset = false;
+                                    boolean canRemoveEdge = false;
+                                    second = checkVertex(e.getX(), e.getY()); // choose second vertex
 
-                                    } catch (NumberFormatException error) { // In case weight is not double
-                                        JOptionPane.showMessageDialog(null, "INVALID WEIGHT");
+                                    if (second != null) { // Two vertices chosen
+                                        reset = true;
+                                        for (Edge edge : window.graph.edges) { // check if edge exists
+                                            if (edge.first.key.equals(first) && edge.second.key.equals(second)) {
+                                                canRemoveEdge = true;
+                                                window.graph.removeEdge(edge.first, edge.second, edge.value);
+                                                break;
+                                            }
+
+                                            if (!window.graph.directed) { // in case graph is undirected
+                                                if (edge.first.key.equals(second) && edge.second.key.equals(first)) {
+                                                    canRemoveEdge = true;
+                                                    window.graph.removeEdge(edge.first, edge.second, edge.value);
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                        if (window.graph.edges.size() == 0)
+                                            window.graph.edges = null;
+
+                                        if (!canRemoveEdge) // in case edge does not exist
+                                            JOptionPane.showMessageDialog(null, "EDGE DOES NOT EXIST");
                                     }
 
-                                    reset = true;
+                                    else
+                                        reset = true;
+
+                                    if (reset) {
+                                        first = null; // Allowed to look for first vertex again
+                                        second = null;
+                                    }
                                 }
                             }
-
-                            else
-                                reset = true;
-
-                            if (reset) {
-                                first = null; // Allowed to look for first vertex again
-                                second = null;
-                            }
-                        }
-                        break;
+                            break;
+                    }
                 }
 
+                if (window.graph != null) // If a graph exists
+                    window.floydWarshall = new FloydWarshall(window.graph);
                 revalidate();
                 repaint();
             }
@@ -212,35 +286,45 @@ public class GraphPanel extends JPanel {
         return null;
     }
 
-    //method to draw a directed arrowline
+    // method to draw a directed arrowline
     private void drawArrowLine(Graphics g, int x1, int y1, int x2, int y2, int d, int h) {
         int dx = x2 - x1, dy = y2 - y1;
-        double D = Math.sqrt(dx*dx + dy*dy);
+        double D = Math.sqrt(dx * dx + dy * dy);
         double xm = D - d, xn = xm, ym = h, yn = -h, x;
         double sin = dy / D, cos = dx / D;
-    
-        x = xm*cos - ym*sin + x1;
-        ym = xm*sin + ym*cos + y1;
+
+        x = xm * cos - ym * sin + x1;
+        ym = xm * sin + ym * cos + y1;
         xm = x;
-    
-        x = xn*cos - yn*sin + x1;
-        yn = xn*sin + yn*cos + y1;
+
+        x = xn * cos - yn * sin + x1;
+        yn = xn * sin + yn * cos + y1;
         xn = x;
-    
-        int[] xpoints = {x2, (int) xm, (int) xn};
-        int[] ypoints = {y2, (int) ym, (int) yn};
-    
+
+        int[] xpoints = { x2, (int) xm, (int) xn };
+        int[] ypoints = { y2, (int) ym, (int) yn };
+
         g.drawLine(x1, y1, x2, y2);
         g.fillPolygon(xpoints, ypoints, 3);
     }
 
     // Check boundaries if user clicked on a vertex in canvas panel
     private String checkVertex(int x, int y) {
-        for (int i = 0; i < window.graph.vertices.size(); i++) {
-            Rectangle boundaries = new Rectangle(window.graph.vertices.get(i).getX() - 15,
-                    window.graph.vertices.get(i).getY() - 15, 30, 30);
-            if (boundaries.contains(new Point(x, y)))
-                return window.graph.vertices.get(i).key;
+        Rectangle boundaries;
+
+        if (window.graph != null) { // if graph exists
+            if (window.graph.vertices != null) {
+                for (int i = 0; i < window.graph.vertices.size(); i++) {
+                    if (window.getTool() == 2) // to avoid overlapping when adding new vertices
+                        boundaries = new Rectangle(window.graph.vertices.get(i).getX() - 40,
+                                window.graph.vertices.get(i).getY() - 40, 80, 80);
+                    else
+                        boundaries = new Rectangle(window.graph.vertices.get(i).getX() - 15,
+                                window.graph.vertices.get(i).getY() - 15, 30, 30);
+                    if (boundaries.contains(new Point(x, y)))
+                        return window.graph.vertices.get(i).key;
+                }
+            }
         }
 
         return null;

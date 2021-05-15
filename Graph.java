@@ -180,7 +180,7 @@ public class Graph {
                     }
 
                     // If there are existing edges
-                    if (edges != null || edges.size() > 0) {
+                    if (edges != null) {
                         for (int j = 0; j < edges.size(); j++) {
                             if (edges.get(j).first == vertices.get(index)
                                     || edges.get(j).second == vertices.get(index)) {
@@ -192,22 +192,26 @@ public class Graph {
                 }
 
                 vertices.remove(v);
-                defaultMatrix();
+                if (vertices.size() > 0)
+                    defaultMatrix();
             }
         }
     }
-    
+
     public void defaultMatrix() {
         weights = new double[vertices.size()][vertices.size()];
         for (int i = 0; i < vertices.size(); i++)
             for (int j = 0; j < vertices.size(); j++)
                 weights[i][j] = 0;
 
-        for (int i = 0; i < edges.size(); i++) {
-            weights[vertices.indexOf(edges.get(i).first)][vertices.indexOf(edges.get(i).second)] = edges.get(i).value;
-            if (!directed)
-                weights[vertices.indexOf(edges.get(i).second)][vertices.indexOf(edges.get(i).first)] = edges
+        if (edges != null) {
+            for (int i = 0; i < edges.size(); i++) {
+                weights[vertices.indexOf(edges.get(i).first)][vertices.indexOf(edges.get(i).second)] = edges
                         .get(i).value;
+                if (!directed)
+                    weights[vertices.indexOf(edges.get(i).second)][vertices.indexOf(edges.get(i).first)] = edges
+                            .get(i).value;
+            }
         }
     }
 }

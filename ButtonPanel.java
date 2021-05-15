@@ -78,14 +78,15 @@ public class ButtonPanel extends JPanel {
     public void setActionAndMouseListeners() {
         adjust.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                window.setTool(0);
             }
         });
 
         inputGraph.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // opens jfile chooser to parse graph
+                window.setTool(1);
                 JFileChooser j = new JFileChooser();
-                
 
                 // only allow files of .txt extension
                 j.setAcceptAllFileFilterUsed(false);
@@ -96,31 +97,30 @@ public class ButtonPanel extends JPanel {
 
                 File graphFile = j.getSelectedFile();
 
-                // creates readgraph object and sets the window graph to the graph in that object
+                // creates readgraph object and sets the window graph to the graph in that
+                // object
                 readg = new GraphReader(graphFile);
                 window.graph = readg.g;
-
+                window.floydWarshall = new FloydWarshall(window.graph);
             }
         });
 
         inputVertex.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                window.tool = 2;
+                window.setTool(2);
                 // creates a directed graph
                 if (window.graph == null) // if in case user clicks button again and there is an existing graph
                     // window.graph = new Graph(true);
-                    if (window.isDirected())
-                    {
+                    if (window.isDirected()) {
                         window.graph = new Graph(true);
-                    }
-                    else
+                    } else
                         window.graph = new Graph(false);
             }
         });
 
         inputEdge.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                window.tool = 3;
+                window.setTool(3);
                 // creates a directed graph
                 // if in case graph has only one or no vertices
                 if (window.graph != null && window.graph.vertices != null && window.graph.vertices.size() > 1
@@ -131,21 +131,25 @@ public class ButtonPanel extends JPanel {
 
         removeVertex.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                window.setTool(4);
             }
         });
 
         removeEdge.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                window.setTool(5);
             }
         });
 
         start.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                window.setTool(6);
             }
         });
 
         reset.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                window.setTool(7);
                 window.graph = null;
             }
         });
