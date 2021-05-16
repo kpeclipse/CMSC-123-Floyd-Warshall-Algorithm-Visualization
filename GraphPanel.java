@@ -62,14 +62,14 @@ public class GraphPanel extends JPanel {
                             g.setColor(Color.BLACK);
 
                             if (!window.graph.directed) { // If graph is undirected
-                                g.drawLine(window.graph.edges.get(i).first.getX() + 15,
+                                g.drawLine(window.graph.edges.get(i).first.getX(),
                                         window.graph.edges.get(i).first.getY(),
-                                        window.graph.edges.get(i).second.getX() - 15,
+                                        window.graph.edges.get(i).second.getX(),
                                         window.graph.edges.get(i).second.getY());
                             } else // If graph is directed
-                                drawArrowLine(g, window.graph.edges.get(i).first.getX() + 15,
+                                drawArrowLine(g, window.graph.edges.get(i).first.getX(),
                                         window.graph.edges.get(i).first.getY(),
-                                        window.graph.edges.get(i).second.getX() - 15,
+                                        window.graph.edges.get(i).second.getX(),
                                         window.graph.edges.get(i).second.getY(), 5, 5);
 
                             g.drawString(Double.toString(window.graph.edges.get(i).value),

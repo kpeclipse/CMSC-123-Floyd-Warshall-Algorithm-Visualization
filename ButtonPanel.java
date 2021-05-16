@@ -93,15 +93,21 @@ public class ButtonPanel extends JPanel {
                 j.setDialogTitle("Select a .txt file");
                 FileNameExtensionFilter restrict = new FileNameExtensionFilter("Only .txt files", "txt");
                 j.addChoosableFileFilter(restrict);
-                j.showOpenDialog(null);
+                int result = j.showOpenDialog(null);
 
-                File graphFile = j.getSelectedFile();
-
-                // creates readgraph object and sets the window graph to the graph in that
-                // object
-                readg = new GraphReader(graphFile);
-                window.graph = readg.g;
-                window.floydWarshall = new FloydWarshall(window.graph);
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    // creates readgraph object and sets the window graph to the graph in that
+                    // object
+                    File graphFile = j.getSelectedFile();
+                    readg = new GraphReader(graphFile);
+                    window.graph = readg.g;
+                    window.floydWarshall = new FloydWarshall(window.graph);
+                } else if (result == JFileChooser.CANCEL_OPTION) {
+                    System.out.println("Cancel was selected");
+                }
+                
+                
+                
             }
         });
 

@@ -1,6 +1,8 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Dimension;
+// import java.awt.event.ComponentAdapter;
+// import java.awt.event.ComponentEvent;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -17,6 +19,7 @@ public class ResultPanel extends JPanel {
     }
 
     public JPanel setTablePanel() {
+
         JPanel panel = new JPanel();
         panel.setSize(400, 425);
 
@@ -40,7 +43,7 @@ public class ResultPanel extends JPanel {
                         g.drawString(Double.toString(window.floydWarshall.dist[0][i]), valueStartX, valueStartY);
 
                         for (int j = 1; j < window.graph.vertices.size(); j++) {
-                            valueStartY += 55;
+                            valueStartY += 50;
                             g.drawRect(tableStartX + 50, tableStartY, 50, 50);
                             g.drawString(Double.toString(window.floydWarshall.dist[j][i]), valueStartX, valueStartY);
                             tableStartX += 50;
@@ -63,19 +66,22 @@ public class ResultPanel extends JPanel {
                 // tableStartY += 10;
                 // }
                 // }
-
+                
                 tablePanel.setPreferredSize(new Dimension(endX + 30, endY + 30));
-
+              
                 updateUI();
             }
         };
+        
         // scrollPane = new JScrollPane(tablePanel,
-        // JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-        // JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        // scrollPane.setSize(400, 425);
+        //         JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+        //         JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        // scrollPane.setPreferredSize(new Dimension(tablePanel.getSize()));
+        // tablePanel.revalidate();
 
-        // panel.add(scrollPane);
         panel.add(tablePanel);
         return panel;
     }
+
+    
 }
