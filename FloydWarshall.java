@@ -30,6 +30,9 @@ public class FloydWarshall {
                         if (dist[i][j] > dist[i][k] + dist[k][j])
                             dist[i][j] = dist[i][k] + dist[k][j];
                     }
+
+                    else
+                        dist[i][j] = 0;
                 }
         }
 

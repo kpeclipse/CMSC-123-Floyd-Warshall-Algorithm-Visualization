@@ -1,22 +1,21 @@
 // 
 VERTICES:
-hi
-were
-one
-direction
-niall
-louis
-liam
-harry
+1
+2
+3
+4
+5
 EDGES:
 //
 //
 //
-direction louis 3
-louis direction 2
-were direction 5
-one were 3
-were one 6
-one louis 6
-liam one 2
-liam niall 5
+1 5 8
+1 2 2
+1 4 1
+2 1 6
+2 4 2
+2 3 3
+3 4 4
+4 3 2
+4 5 3
+5 1 3
