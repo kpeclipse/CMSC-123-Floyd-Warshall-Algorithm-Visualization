@@ -116,7 +116,7 @@ public class Graph {
             zeroInDegreeVertices = new ArrayList<Vertex>();
 
             weights = new double[1][1];
-            weights[0][0] = 0;
+            weights[0][0] = Double.POSITIVE_INFINITY;
         }
 
         // If there is at least one vertex
@@ -136,8 +136,8 @@ public class Graph {
                 weights = new double[vertices.size() + 1][vertices.size() + 1];
 
                 for (int i = 0; i < vertices.size() + 1; i++) {
-                    weights[i][vertices.size()] = 0;
-                    weights[vertices.size()][i] = 0;
+                    weights[i][vertices.size()] = Double.POSITIVE_INFINITY;
+                    weights[vertices.size()][i] = Double.POSITIVE_INFINITY;
                 }
 
                 for (int i = 0; i < vertices.size(); i++)
@@ -202,7 +202,7 @@ public class Graph {
         weights = new double[vertices.size()][vertices.size()];
         for (int i = 0; i < vertices.size(); i++)
             for (int j = 0; j < vertices.size(); j++)
-                weights[i][j] = 0;
+                weights[i][j] = Double.POSITIVE_INFINITY;
 
         if (edges != null) {
             for (int i = 0; i < edges.size(); i++) {

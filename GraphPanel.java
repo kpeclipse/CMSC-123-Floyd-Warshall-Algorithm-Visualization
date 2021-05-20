@@ -38,7 +38,9 @@ public class GraphPanel extends JPanel {
 
         // graphics component
         canvasPanel = new JPanel() {
+            @Override
             public void paintComponent(Graphics g) {
+                super.paintComponent(g);
                 setBounds(0, 0, 550, 725);
 
                 // if graph is not empty
@@ -63,13 +65,11 @@ public class GraphPanel extends JPanel {
 
                             if (!window.graph.directed) { // If graph is undirected
                                 g.drawLine(window.graph.edges.get(i).first.getX(),
-                                        window.graph.edges.get(i).first.getY(),
-                                        window.graph.edges.get(i).second.getX(),
+                                        window.graph.edges.get(i).first.getY(), window.graph.edges.get(i).second.getX(),
                                         window.graph.edges.get(i).second.getY());
                             } else // If graph is directed
                                 drawArrowLine(g, window.graph.edges.get(i).first.getX(),
-                                        window.graph.edges.get(i).first.getY(),
-                                        window.graph.edges.get(i).second.getX(),
+                                        window.graph.edges.get(i).first.getY(), window.graph.edges.get(i).second.getX(),
                                         window.graph.edges.get(i).second.getY(), 5, 5);
 
                             g.drawString(Double.toString(window.graph.edges.get(i).value),

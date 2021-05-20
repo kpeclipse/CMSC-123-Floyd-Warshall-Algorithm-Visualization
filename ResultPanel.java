@@ -1,9 +1,8 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Dimension;
-// import java.awt.event.ComponentAdapter;
-// import java.awt.event.ComponentEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -19,15 +18,14 @@ public class ResultPanel extends JPanel {
     }
 
     public JPanel setTablePanel() {
-
         JPanel panel = new JPanel();
         panel.setSize(400, 425);
 
-        tablePanel = new JPanel() {
+        tablePanel = new JPanel(null) {
+            @Override
             public void paintComponent(Graphics g) {
-                setBounds(0, 0, 400, 425);
-
-                int endX = 400, endY = 425;
+                super.paintComponent(g);
+                int endX = 300, endY = 315;
                 int tableStartX = 50, tableStartY = 30;
                 int labelStartX = tableStartX + 20, labelStartY = tableStartY + 30;
                 int valueStartX = 60, valueStartY = 55;
@@ -47,12 +45,19 @@ public class ResultPanel extends JPanel {
                             g.drawRect(tableStartX + 50, tableStartY, 50, 50);
                             g.drawString(Double.toString(window.floydWarshall.dist[j][i]), valueStartX, valueStartY);
                             tableStartX += 50;
+
+                            if (tableStartX > endX)
+                                endX = tableStartX + 50;
                         }
 
                         tableStartY += 50;
                         labelStartX += 50;
                         labelStartY += 50;
                         valueStartX += 50;
+
+                        if (tableStartY > endY) {
+                            endY = tableStartY + 50;
+                        }
                     }
                 }
 
@@ -66,22 +71,18 @@ public class ResultPanel extends JPanel {
                 // tableStartY += 10;
                 // }
                 // }
-                
-                tablePanel.setPreferredSize(new Dimension(endX + 30, endY + 30));
-              
-                updateUI();
+                setPreferredSize(new Dimension(endX + 60, endY + 30));
+                revalidate();
+                repaint();
             }
         };
-        
-        // scrollPane = new JScrollPane(tablePanel,
-        //         JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-        //         JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        // scrollPane.setPreferredSize(new Dimension(tablePanel.getSize()));
-        // tablePanel.revalidate();
 
-        panel.add(tablePanel);
+        scrollPane = new JScrollPane(tablePanel);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane.setPreferredSize(new Dimension(395, 420));
+
+        panel.add(scrollPane);
         return panel;
     }
 
-    
 }
