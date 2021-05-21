@@ -10,13 +10,13 @@ import javax.swing.JPanel;
 public class Window extends JFrame {
     private static int width = 1200, height = 725;
 
-    private JPanel algorithm;
     private int tool;
 
     ButtonPanel buttons;
     AdjustmentsPanel adjustments;
     GraphPanel display;
     ResultPanel data;
+    AlgorithmPanel algorithm;
 
     protected Graph graph;
     protected FloydWarshall floydWarshall;
@@ -45,14 +45,13 @@ public class Window extends JFrame {
         adjustments = new AdjustmentsPanel(this);
         display = new GraphPanel(this);
         data = new ResultPanel(this);
-
-        // setting the algorithm view
-        algorithm = setPanel(0, 425, 400, 300, Color.BLUE, "data");
+        algorithm = new AlgorithmPanel(this);
 
         buttons.setBounds(950, 0, 250, 300);
         adjustments.setBounds(950, 300, 250, 425);
         display.setBounds(400, 0, 550, height);
         data.setBounds(0, 0, 400, 425);
+        algorithm.setBounds(0, 425, 400, 300);
 
         add(buttons);
         add(adjustments);

@@ -12,6 +12,7 @@ import java.awt.Graphics;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -41,6 +42,7 @@ public class GraphPanel extends JPanel {
             @Override
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
+                setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 setBounds(0, 0, 550, 725);
 
                 // if graph is not empty

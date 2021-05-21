@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Dimension;
 
@@ -20,11 +21,13 @@ public class ResultPanel extends JPanel {
     public JPanel setTablePanel() {
         JPanel panel = new JPanel();
         panel.setSize(400, 425);
+        panel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
 
         tablePanel = new JPanel(null) {
             @Override
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
+
                 int endX = 300, endY = 315;
                 int tableStartX = 50, tableStartY = 30;
                 int labelStartX = tableStartX + 20, labelStartY = tableStartY + 30;
@@ -35,14 +38,25 @@ public class ResultPanel extends JPanel {
                     for (int i = 0; i < window.graph.vertices.size(); i++) {
                         tableStartX = 50;
                         valueStartY = 55;
+                        // Draw first box in a row
                         g.drawRect(tableStartX, tableStartY, 50, 50);
+
+                        Font font = new Font("Arial", Font.PLAIN, 13);
+                        g.setFont(font);
+
+                        // Write the vertices
                         g.drawString(window.graph.vertices.get(i).key, labelStartX, 20);
                         g.drawString(window.graph.vertices.get(i).key, 20, labelStartY);
+
+                        // Write the edge weight
                         g.drawString(Double.toString(window.floydWarshall.dist[0][i]), valueStartX, valueStartY);
 
                         for (int j = 1; j < window.graph.vertices.size(); j++) {
                             valueStartY += 50;
+                            // Draw boxes
                             g.drawRect(tableStartX + 50, tableStartY, 50, 50);
+
+                            // Write edge weights
                             g.drawString(Double.toString(window.floydWarshall.dist[j][i]), valueStartX, valueStartY);
                             tableStartX += 50;
 
@@ -79,10 +93,9 @@ public class ResultPanel extends JPanel {
 
         scrollPane = new JScrollPane(tablePanel);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
-        scrollPane.setPreferredSize(new Dimension(395, 420));
+        scrollPane.setPreferredSize(new Dimension(390, 415));
 
         panel.add(scrollPane);
         return panel;
     }
-
 }

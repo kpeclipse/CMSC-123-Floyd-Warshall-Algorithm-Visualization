@@ -33,7 +33,7 @@ public class ButtonPanel extends JPanel {
         window = w;
 
         setLayout(new GridLayout(8, 1));
-        setBackground(Color.BLACK);
+        // setBackground(Color.BLACK);
 
         setButtons();
         setActionAndMouseListeners();
@@ -69,7 +69,7 @@ public class ButtonPanel extends JPanel {
     public JButton setButton(String name, Font font) {
         JButton theButton = new JButton(name);
         theButton.setFont(font);
-        theButton.setForeground(Color.WHITE);
+        theButton.setForeground(Color.BLACK);
         theButton.setContentAreaFilled(false);
         theButton.setFocusPainted(false);
         return theButton;
@@ -105,9 +105,7 @@ public class ButtonPanel extends JPanel {
                 } else if (result == JFileChooser.CANCEL_OPTION) {
                     System.out.println("Cancel was selected");
                 }
-                
-                
-                
+
             }
         });
 
@@ -150,6 +148,7 @@ public class ButtonPanel extends JPanel {
         start.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 window.setTool(6);
+                window.floydWarshall.run = true;
             }
         });
 
@@ -162,14 +161,15 @@ public class ButtonPanel extends JPanel {
 
         adjust.addMouseListener(new MouseListener() {
             public void mouseEntered(MouseEvent e) {
-                adjust.setForeground(Color.BLACK);
+                adjust.setForeground(Color.WHITE);
                 adjust.setContentAreaFilled(true);
-                adjust.setBackground(Color.WHITE);
+                adjust.setBackground(Color.BLUE);
             }
 
             public void mouseExited(MouseEvent e) {
-                adjust.setForeground(Color.WHITE);
+                adjust.setForeground(Color.BLACK);
                 adjust.setContentAreaFilled(false);
+                adjust.setBackground(null);
             }
 
             public void mouseReleased(MouseEvent e) {
@@ -186,14 +186,15 @@ public class ButtonPanel extends JPanel {
 
         inputGraph.addMouseListener(new MouseListener() {
             public void mouseEntered(MouseEvent e) {
-                inputGraph.setForeground(Color.BLACK);
+                inputGraph.setForeground(Color.WHITE);
                 inputGraph.setContentAreaFilled(true);
-                inputGraph.setBackground(Color.WHITE);
+                inputGraph.setBackground(Color.BLUE);
             }
 
             public void mouseExited(MouseEvent e) {
-                inputGraph.setForeground(Color.WHITE);
+                inputGraph.setForeground(Color.BLACK);
                 inputGraph.setContentAreaFilled(false);
+                inputGraph.setBackground(null);
             }
 
             public void mouseReleased(MouseEvent e) {
@@ -210,14 +211,15 @@ public class ButtonPanel extends JPanel {
 
         inputVertex.addMouseListener(new MouseListener() {
             public void mouseEntered(MouseEvent e) {
-                inputVertex.setForeground(Color.BLACK);
+                inputVertex.setForeground(Color.WHITE);
                 inputVertex.setContentAreaFilled(true);
-                inputVertex.setBackground(Color.WHITE);
+                inputVertex.setBackground(Color.BLUE);
             }
 
             public void mouseExited(MouseEvent e) {
-                inputVertex.setForeground(Color.WHITE);
+                inputVertex.setForeground(Color.BLACK);
                 inputVertex.setContentAreaFilled(false);
+                inputVertex.setBackground(null);
             }
 
             public void mouseReleased(MouseEvent e) {
@@ -234,14 +236,15 @@ public class ButtonPanel extends JPanel {
 
         inputEdge.addMouseListener(new MouseListener() {
             public void mouseEntered(MouseEvent e) {
-                inputEdge.setForeground(Color.BLACK);
+                inputEdge.setForeground(Color.WHITE);
                 inputEdge.setContentAreaFilled(true);
-                inputEdge.setBackground(Color.WHITE);
+                inputEdge.setBackground(Color.BLUE);
             }
 
             public void mouseExited(MouseEvent e) {
-                inputEdge.setForeground(Color.WHITE);
+                inputEdge.setForeground(Color.BLACK);
                 inputEdge.setContentAreaFilled(false);
+                inputEdge.setBackground(null);
             }
 
             public void mouseReleased(MouseEvent e) {
@@ -258,14 +261,15 @@ public class ButtonPanel extends JPanel {
 
         removeVertex.addMouseListener(new MouseListener() {
             public void mouseEntered(MouseEvent e) {
-                removeVertex.setForeground(Color.BLACK);
+                removeVertex.setForeground(Color.WHITE);
                 removeVertex.setContentAreaFilled(true);
-                removeVertex.setBackground(Color.WHITE);
+                removeVertex.setBackground(Color.BLUE);
             }
 
             public void mouseExited(MouseEvent e) {
-                removeVertex.setForeground(Color.WHITE);
+                removeVertex.setForeground(Color.BLACK);
                 removeVertex.setContentAreaFilled(false);
+                removeVertex.setBackground(null);
             }
 
             public void mouseReleased(MouseEvent e) {
@@ -282,14 +286,15 @@ public class ButtonPanel extends JPanel {
 
         removeEdge.addMouseListener(new MouseListener() {
             public void mouseEntered(MouseEvent e) {
-                removeEdge.setForeground(Color.BLACK);
+                removeEdge.setForeground(Color.WHITE);
                 removeEdge.setContentAreaFilled(true);
-                removeEdge.setBackground(Color.WHITE);
+                removeEdge.setBackground(Color.BLUE);
             }
 
             public void mouseExited(MouseEvent e) {
-                removeEdge.setForeground(Color.WHITE);
+                removeEdge.setForeground(Color.BLACK);
                 removeEdge.setContentAreaFilled(false);
+                removeEdge.setBackground(null);
             }
 
             public void mouseReleased(MouseEvent e) {
@@ -306,14 +311,15 @@ public class ButtonPanel extends JPanel {
 
         start.addMouseListener(new MouseListener() {
             public void mouseEntered(MouseEvent e) {
-                start.setForeground(Color.BLACK);
+                start.setForeground(Color.WHITE);
                 start.setContentAreaFilled(true);
-                start.setBackground(Color.WHITE);
+                start.setBackground(Color.BLUE);
             }
 
             public void mouseExited(MouseEvent e) {
-                start.setForeground(Color.WHITE);
+                start.setForeground(Color.BLACK);
                 start.setContentAreaFilled(false);
+                removeEdge.setBackground(null);
             }
 
             public void mouseReleased(MouseEvent e) {
@@ -330,14 +336,15 @@ public class ButtonPanel extends JPanel {
 
         reset.addMouseListener(new MouseListener() {
             public void mouseEntered(MouseEvent e) {
-                reset.setForeground(Color.BLACK);
+                reset.setForeground(Color.WHITE);
                 reset.setContentAreaFilled(true);
-                reset.setBackground(Color.WHITE);
+                reset.setBackground(Color.BLUE);
             }
 
             public void mouseExited(MouseEvent e) {
-                reset.setForeground(Color.WHITE);
+                reset.setForeground(Color.BLACK);
                 reset.setContentAreaFilled(false);
+                reset.setBackground(null);
             }
 
             public void mouseReleased(MouseEvent e) {
