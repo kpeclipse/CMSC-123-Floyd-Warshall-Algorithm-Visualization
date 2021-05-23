@@ -14,7 +14,7 @@ public class AlgorithmPanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
+        setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.BLACK));
 
         if (window.floydWarshall != null) {
             if (window.floydWarshall.run) {

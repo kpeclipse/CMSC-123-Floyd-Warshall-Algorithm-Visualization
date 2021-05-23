@@ -12,6 +12,8 @@ public class ResultPanel extends JPanel {
     private JPanel tablePanel;
     private JScrollPane scrollPane;
 
+    private int x = 0, y = 0, k = 0;
+
     public ResultPanel(Window w) {
         window = w;
         setLayout(null);
@@ -21,7 +23,7 @@ public class ResultPanel extends JPanel {
     public JPanel setTablePanel() {
         JPanel panel = new JPanel();
         panel.setSize(400, 425);
-        panel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK));
+        panel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, Color.BLACK));
 
         tablePanel = new JPanel(null) {
             @Override
@@ -35,6 +37,7 @@ public class ResultPanel extends JPanel {
 
                 if (window.graph != null && window.graph.vertices != null) {
                     g.setColor(Color.BLACK);
+
                     for (int i = 0; i < window.graph.vertices.size(); i++) {
                         tableStartX = 50;
                         valueStartY = 55;
@@ -49,7 +52,7 @@ public class ResultPanel extends JPanel {
                         g.drawString(window.graph.vertices.get(i).key, 20, labelStartY);
 
                         // Write the edge weight
-                        g.drawString(Double.toString(window.floydWarshall.dist[0][i]), valueStartX, valueStartY);
+                        g.drawString(Double.toString(window.graph.weights[0][i]), valueStartX, valueStartY);
 
                         for (int j = 1; j < window.graph.vertices.size(); j++) {
                             valueStartY += 50;
@@ -57,7 +60,7 @@ public class ResultPanel extends JPanel {
                             g.drawRect(tableStartX + 50, tableStartY, 50, 50);
 
                             // Write edge weights
-                            g.drawString(Double.toString(window.floydWarshall.dist[j][i]), valueStartX, valueStartY);
+                            g.drawString(Double.toString(window.graph.weights[j][i]), valueStartX, valueStartY);
                             tableStartX += 50;
 
                             if (tableStartX > endX)
@@ -72,6 +75,13 @@ public class ResultPanel extends JPanel {
                         if (tableStartY > endY) {
                             endY = tableStartY + 50;
                         }
+                    }
+
+                    if (x != 0) {
+                        g.setColor(Color.RED);
+                        g.drawRect(50 + 50 * x, 30 + 50 * y, 50, 50);
+                        g.drawRect(50 + 50 * x, 30 + 50 * k, 50, 50);
+                        g.drawRect(50 + 50 * k, 30 + 50 * y, 50, 50);
                     }
                 }
 
@@ -97,5 +107,11 @@ public class ResultPanel extends JPanel {
 
         panel.add(scrollPane);
         return panel;
+    }
+
+    public void paintTablePanel(int k, int i, int j) {
+        x = i;
+        y = j;
+        this.k = k;
     }
 }

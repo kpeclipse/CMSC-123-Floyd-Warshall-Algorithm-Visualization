@@ -1,10 +1,7 @@
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontFormatException;
 
-import java.io.File;
-import java.io.IOException;
-
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -12,65 +9,72 @@ import javax.swing.ButtonGroup;
 import javax.swing.JSlider;
 
 public class AdjustmentsPanel extends JPanel {
-    private Window window;
-    public JRadioButton dGraph;
-    public JRadioButton uGraph;
+    private JRadioButton dGraph;
+    private JRadioButton uGraph;
+    private JSlider slider;
 
     public AdjustmentsPanel(Window w) {
-        window = w;
         setLayout(null);
-        setBackground(Color.BLACK);
+        setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Color.BLACK));
 
         setRadioButtons();
         setSimulationSpeed();
     }
 
+    public void disableRadioButton(boolean directed) {
+        if (directed)
+            uGraph.setEnabled(false);
+        else
+            dGraph.setEnabled(false);
+    }
+
+    public void enableRadioButton(boolean directed) {
+        if (directed)
+            uGraph.setEnabled(true);
+        else
+            dGraph.setEnabled(true);
+    }
+
     private void setRadioButtons() {
-        dGraph = new JRadioButton("Directed Graph");
-        dGraph.setFont(useFont(System.getProperty("user.dir") + "/resources/BebasNeue-Regular.ttf", 20));
-        dGraph.setForeground(Color.WHITE);
+        dGraph = new JRadioButton("DIRECTED GRAPH");
+        dGraph.setFont(new Font("Arial", Font.PLAIN, 13));
         dGraph.setContentAreaFilled(false);
         dGraph.setFocusPainted(false);
-        dGraph.setBounds(10, 20, 150, 30);
-        
-        uGraph = new JRadioButton("Undirected Graph");
-        uGraph.setFont(useFont(System.getProperty("user.dir") + "/resources/BebasNeue-Regular.ttf", 20));
-        uGraph.setForeground(Color.WHITE);
+        dGraph.setBounds(10, 20, 180, 30);
+
+        uGraph = new JRadioButton("UNDIRECTED GRAPH");
+        uGraph.setFont(new Font("Arial", Font.PLAIN, 13));
         uGraph.setContentAreaFilled(false);
         uGraph.setFocusPainted(false);
-        uGraph.setBounds(10, 50, 150, 30);
+        uGraph.setBounds(10, 50, 180, 30);
         dGraph.isSelected();
 
         ButtonGroup G = new ButtonGroup();
         G.add(dGraph);
         G.add(uGraph);
-        
+
         add(dGraph);
         add(uGraph);
         dGraph.setSelected(true);
     }
 
     private void setSimulationSpeed() {
-        JLabel simulationSpeed = new JLabel("Simulation Speed");
-        simulationSpeed.setFont(useFont(System.getProperty("user.dir") + "/resources/BebasNeue-Regular.ttf", 25));
-        simulationSpeed.setForeground(Color.WHITE);
+        JLabel simulationSpeed = new JLabel("SIMULATION SPEED");
+        simulationSpeed.setFont(new Font("Arial", Font.PLAIN, 15));
         simulationSpeed.setBounds(30, 95, 150, 30);
 
         JLabel fast = new JLabel("Fast");
-        fast.setFont(useFont(System.getProperty("user.dir") + "/resources/BebasNeue-Regular.ttf", 20));
-        fast.setForeground(Color.WHITE);
-        fast.setBounds(120, 140, 150, 30);
+        fast.setFont(new Font("Arial", Font.PLAIN, 13));
+        fast.setBounds(80, 145, 150, 30);
 
         JLabel slow = new JLabel("Slow");
-        slow.setFont(useFont(System.getProperty("user.dir") + "/resources/BebasNeue-Regular.ttf", 20));
-        slow.setForeground(Color.WHITE);
-        slow.setBounds(120, 330, 150, 30);
+        slow.setFont(new Font("Arial", Font.PLAIN, 13));
+        slow.setBounds(80, 325, 150, 30);
 
-        JSlider slider = new JSlider(JSlider.VERTICAL, 0, 10, 5);
-        slider.setBackground(Color.WHITE);
+        slider = new JSlider(JSlider.VERTICAL, 0, 10, 5);
         slider.setMajorTickSpacing(1);
         slider.setPaintTicks(true);
-        slider.setBounds(60, 150, 30, 200);
+        slider.setBounds(30, 150, 30, 200);
 
         add(fast);
         add(slow);
@@ -78,13 +82,15 @@ public class AdjustmentsPanel extends JPanel {
         add(slider);
     }
 
-    // What font to use
-    public Font useFont(String path, int size) {
-        try {
-            return Font.createFont(Font.TRUETYPE_FONT, new File(path)).deriveFont(Font.PLAIN, size);
-        } catch (FontFormatException | IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public int getSpeed() {
+        return slider.getValue();
+    }
+
+    public boolean getSelected() {
+        if (dGraph.isSelected())
+            return true;
+        else if (uGraph.isSelected())
+            return false;
+        return false;
     }
 }

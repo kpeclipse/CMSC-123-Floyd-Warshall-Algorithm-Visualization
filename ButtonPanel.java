@@ -4,12 +4,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 import java.awt.Font;
-import java.awt.FontFormatException;
 import java.awt.GridLayout;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.filechooser.*;
@@ -18,7 +17,6 @@ import javax.swing.JFileChooser;
 public class ButtonPanel extends JPanel {
     private Window window;
     private GraphReader readg;
-    private AdjustmentsPanel adjustments;
 
     private JButton inputGraph;
     private JButton inputVertex;
@@ -33,6 +31,7 @@ public class ButtonPanel extends JPanel {
         window = w;
 
         setLayout(new GridLayout(8, 1));
+        setBorder(BorderFactory.createMatteBorder(0, 1, 1, 0, Color.BLACK));
         // setBackground(Color.BLACK);
 
         setButtons();
@@ -41,19 +40,14 @@ public class ButtonPanel extends JPanel {
 
     // Initialize buttons
     public void setButtons() {
-        adjust = setButton("ADJUST", useFont(System.getProperty("user.dir") + "/resources/BebasNeue-Regular.ttf", 20));
-        inputGraph = setButton("INPUT GRAPH",
-                useFont(System.getProperty("user.dir") + "/resources/BebasNeue-Regular.ttf", 20));
-        inputVertex = setButton("INPUT VERTEX",
-                useFont(System.getProperty("user.dir") + "/resources/BebasNeue-Regular.ttf", 20));
-        inputEdge = setButton("INPUT EDGE",
-                useFont(System.getProperty("user.dir") + "/resources/BebasNeue-Regular.ttf", 20));
-        removeVertex = setButton("REMOVE VERTEX",
-                useFont(System.getProperty("user.dir") + "/resources/BebasNeue-Regular.ttf", 20));
-        removeEdge = setButton("REMOVE EDGE",
-                useFont(System.getProperty("user.dir") + "/resources/BebasNeue-Regular.ttf", 20));
-        start = setButton("START", useFont(System.getProperty("user.dir") + "/resources/BebasNeue-Regular.ttf", 20));
-        reset = setButton("RESET", useFont(System.getProperty("user.dir") + "/resources/BebasNeue-Regular.ttf", 20));
+        adjust = setButton("ADJUST", new Font("Arial", Font.PLAIN, 13));
+        inputGraph = setButton("INPUT GRAPH", new Font("Arial", Font.PLAIN, 13));
+        inputVertex = setButton("INPUT VERTEX", new Font("Arial", Font.PLAIN, 13));
+        inputEdge = setButton("INPUT EDGE", new Font("Arial", Font.PLAIN, 13));
+        removeVertex = setButton("REMOVE VERTEX", new Font("Arial", Font.PLAIN, 13));
+        removeEdge = setButton("REMOVE EDGE", new Font("Arial", Font.PLAIN, 13));
+        start = setButton("START", new Font("Arial", Font.PLAIN, 13));
+        reset = setButton("RESET", new Font("Arial", Font.PLAIN, 13));
 
         add(adjust);
         add(inputGraph);
@@ -70,7 +64,7 @@ public class ButtonPanel extends JPanel {
         JButton theButton = new JButton(name);
         theButton.setFont(font);
         theButton.setForeground(Color.BLACK);
-        theButton.setContentAreaFilled(false);
+        // theButton.setContentAreaFilled(false);
         theButton.setFocusPainted(false);
         return theButton;
     }
@@ -101,7 +95,6 @@ public class ButtonPanel extends JPanel {
                     File graphFile = j.getSelectedFile();
                     readg = new GraphReader(graphFile);
                     window.graph = readg.g;
-                    window.floydWarshall = new FloydWarshall(window.graph);
                 } else if (result == JFileChooser.CANCEL_OPTION) {
                     System.out.println("Cancel was selected");
                 }
@@ -113,12 +106,11 @@ public class ButtonPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 window.setTool(2);
                 // creates a directed graph
-                if (window.graph == null) // if in case user clicks button again and there is an existing graph
+                if (window.graph == null) { // if in case user clicks button again and there is an existing graph
                     // window.graph = new Graph(true);
-                    if (window.isDirected()) {
-                        window.graph = new Graph(true);
-                    } else
-                        window.graph = new Graph(false);
+                    window.graph = new Graph(window.isDirected());
+                    window.adjustments.disableRadioButton(window.adjustments.getSelected());
+                }
             }
         });
 
@@ -128,8 +120,10 @@ public class ButtonPanel extends JPanel {
                 // creates a directed graph
                 // if in case graph has only one or no vertices
                 if (window.graph != null && window.graph.vertices != null && window.graph.vertices.size() > 1
-                        && window.graph.edges == null)
+                        && window.graph.edges == null) {
                     window.graph.edges = new ArrayList<Edge>();
+                }
+
             }
         });
 
@@ -148,14 +142,21 @@ public class ButtonPanel extends JPanel {
         start.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 window.setTool(6);
-                window.floydWarshall.run = true;
+                if (window.graph != null) {
+                    window.floydWarshall = new FloydWarshall(window);
+                    window.floydWarshall.run = true;
+                }
             }
         });
 
         reset.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 window.setTool(7);
-                window.graph = null;
+                if (window.graph != null) {
+                    window.adjustments.enableRadioButton(window.graph.isDirected());
+                    window.graph = null;
+
+                }
             }
         });
 
@@ -168,12 +169,12 @@ public class ButtonPanel extends JPanel {
 
             public void mouseExited(MouseEvent e) {
                 adjust.setForeground(Color.BLACK);
-                adjust.setContentAreaFilled(false);
+                // adjust.setContentAreaFilled(false);
                 adjust.setBackground(null);
             }
 
             public void mouseReleased(MouseEvent e) {
-                adjust.setContentAreaFilled(false);
+                // adjust.setContentAreaFilled(false);
                 adjust.setForeground(Color.WHITE);
             }
 
@@ -193,12 +194,12 @@ public class ButtonPanel extends JPanel {
 
             public void mouseExited(MouseEvent e) {
                 inputGraph.setForeground(Color.BLACK);
-                inputGraph.setContentAreaFilled(false);
+                // inputGraph.setContentAreaFilled(false);
                 inputGraph.setBackground(null);
             }
 
             public void mouseReleased(MouseEvent e) {
-                inputGraph.setContentAreaFilled(false);
+                // inputGraph.setContentAreaFilled(false);
                 inputGraph.setForeground(Color.WHITE);
             }
 
@@ -218,13 +219,13 @@ public class ButtonPanel extends JPanel {
 
             public void mouseExited(MouseEvent e) {
                 inputVertex.setForeground(Color.BLACK);
-                inputVertex.setContentAreaFilled(false);
+                // inputVertex.setContentAreaFilled(false);
                 inputVertex.setBackground(null);
             }
 
             public void mouseReleased(MouseEvent e) {
                 inputVertex.setForeground(Color.WHITE);
-                inputVertex.setContentAreaFilled(false);
+                // inputVertex.setContentAreaFilled(false);
             }
 
             public void mouseClicked(MouseEvent e) {
@@ -243,13 +244,13 @@ public class ButtonPanel extends JPanel {
 
             public void mouseExited(MouseEvent e) {
                 inputEdge.setForeground(Color.BLACK);
-                inputEdge.setContentAreaFilled(false);
+                // inputEdge.setContentAreaFilled(false);
                 inputEdge.setBackground(null);
             }
 
             public void mouseReleased(MouseEvent e) {
                 inputEdge.setForeground(Color.WHITE);
-                inputEdge.setContentAreaFilled(false);
+                // inputEdge.setContentAreaFilled(false);
             }
 
             public void mouseClicked(MouseEvent e) {
@@ -268,13 +269,13 @@ public class ButtonPanel extends JPanel {
 
             public void mouseExited(MouseEvent e) {
                 removeVertex.setForeground(Color.BLACK);
-                removeVertex.setContentAreaFilled(false);
+                // removeVertex.setContentAreaFilled(false);
                 removeVertex.setBackground(null);
             }
 
             public void mouseReleased(MouseEvent e) {
                 removeVertex.setForeground(Color.WHITE);
-                removeVertex.setContentAreaFilled(false);
+                // removeVertex.setContentAreaFilled(false);
             }
 
             public void mouseClicked(MouseEvent e) {
@@ -293,12 +294,12 @@ public class ButtonPanel extends JPanel {
 
             public void mouseExited(MouseEvent e) {
                 removeEdge.setForeground(Color.BLACK);
-                removeEdge.setContentAreaFilled(false);
+                // removeEdge.setContentAreaFilled(false);
                 removeEdge.setBackground(null);
             }
 
             public void mouseReleased(MouseEvent e) {
-                removeEdge.setContentAreaFilled(false);
+                // removeEdge.setContentAreaFilled(false);
                 removeEdge.setForeground(Color.WHITE);
             }
 
@@ -318,12 +319,12 @@ public class ButtonPanel extends JPanel {
 
             public void mouseExited(MouseEvent e) {
                 start.setForeground(Color.BLACK);
-                start.setContentAreaFilled(false);
-                removeEdge.setBackground(null);
+                // start.setContentAreaFilled(false);
+                start.setBackground(null);
             }
 
             public void mouseReleased(MouseEvent e) {
-                start.setContentAreaFilled(false);
+                // start.setContentAreaFilled(false);
                 start.setForeground(Color.WHITE);
             }
 
@@ -343,12 +344,12 @@ public class ButtonPanel extends JPanel {
 
             public void mouseExited(MouseEvent e) {
                 reset.setForeground(Color.BLACK);
-                reset.setContentAreaFilled(false);
+                // reset.setContentAreaFilled(false);
                 reset.setBackground(null);
             }
 
             public void mouseReleased(MouseEvent e) {
-                reset.setContentAreaFilled(false);
+                // reset.setContentAreaFilled(false);
                 reset.setForeground(Color.WHITE);
             }
 
@@ -358,15 +359,5 @@ public class ButtonPanel extends JPanel {
             public void mousePressed(MouseEvent e) {
             }
         });
-    }
-
-    // What font to use
-    public Font useFont(String path, int size) {
-        try {
-            return Font.createFont(Font.TRUETYPE_FONT, new File(path)).deriveFont(Font.PLAIN, size);
-        } catch (FontFormatException | IOException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 }

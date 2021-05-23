@@ -2,8 +2,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.Point;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 import java.awt.Font;
@@ -12,20 +10,16 @@ import java.awt.Graphics;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
 public class GraphPanel extends JPanel {
     private Window window;
     private JPanel canvasPanel;
-    private JScrollPane canvas;
     private String first = null;
     private String second = null;
 
     private int startX = 50, startY = 50;
-    private int endX = 520, endY = 695;
 
     public GraphPanel(Window w) {
         window = w;
@@ -36,15 +30,12 @@ public class GraphPanel extends JPanel {
     public JPanel setCanvasPanel() {
         JPanel panel = new JPanel();
         panel.setSize(550, 725);
-
         // graphics component
         canvasPanel = new JPanel() {
             @Override
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 setBounds(0, 0, 550, 725);
-
                 // if graph is not empty
                 if (window.graph != null) {
                     // DISPLAY VERTICES
@@ -65,7 +56,7 @@ public class GraphPanel extends JPanel {
                         for (int i = 0; i < window.graph.edges.size(); i++) {
                             g.setColor(Color.BLACK);
 
-                            if (!window.graph.directed) { // If graph is undirected
+                            if (!window.graph.isDirected()) { // If graph is undirected
                                 g.drawLine(window.graph.edges.get(i).first.getX(),
                                         window.graph.edges.get(i).first.getY(), window.graph.edges.get(i).second.getX(),
                                         window.graph.edges.get(i).second.getY());
@@ -81,10 +72,9 @@ public class GraphPanel extends JPanel {
                                             / 2);
                         }
                     }
-
-                    canvasPanel.setPreferredSize(new Dimension(endX + 30, endY + 30));
                     updateUI();
                 }
+                setPreferredSize(new Dimension(550, 700));
             }
         };
 
@@ -115,7 +105,7 @@ public class GraphPanel extends JPanel {
                             if (element == null) { // check if there is no overlapping vertex
                                 do {
                                     element = JOptionPane.showInputDialog("Vertex Name (Max: 3)");
-                                } while (element.length() > 3); // 3 characters only
+                                } while (element != null && element.length() > 3); // 3 characters only
 
                                 if (element != null) {
                                     if (window.graph.vertices != null) {
@@ -198,8 +188,8 @@ public class GraphPanel extends JPanel {
                                     if (v.key.equals(removeVertex)) {
                                         window.graph.removeVertex(v);
                                         if (window.graph.vertices.size() == 0) {
+                                            window.adjustments.enableRadioButton(window.graph.isDirected());
                                             window.graph = null;
-                                            window.floydWarshall = null;
                                         }
                                         break;
                                     }
@@ -228,7 +218,7 @@ public class GraphPanel extends JPanel {
                                                 break;
                                             }
 
-                                            if (!window.graph.directed) { // in case graph is undirected
+                                            if (!window.graph.isDirected()) { // in case graph is undirected
                                                 if (edge.first.key.equals(second) && edge.second.key.equals(first)) {
                                                     canRemoveEdge = true;
                                                     window.graph.removeEdge(edge.first, edge.second, edge.value);
@@ -257,23 +247,12 @@ public class GraphPanel extends JPanel {
                     }
                 }
 
-                if (window.graph != null) // If a graph exists
-                    window.floydWarshall = new FloydWarshall(window.graph);
+                // if (window.graph != null) // If a graph exists
+                // window.floydWarshall = new FloydWarshall(window.graph);
                 revalidate();
                 repaint();
             }
         });
-
-        canvas = new JScrollPane();
-        canvas.setBorder(null);
-
-        addComponentListener(new ComponentAdapter() {
-            public void componentResized(ComponentEvent e) {
-                canvas.setBounds(0, 0, (int) e.getComponent().getWidth(), (int) e.getComponent().getHeight() - 98);
-            }
-        });
-
-        canvasPanel.add(canvas);
         panel.add(canvasPanel);
         return panel;
     }

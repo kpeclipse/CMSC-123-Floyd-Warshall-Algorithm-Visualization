@@ -5,13 +5,17 @@ public class Graph {
     ArrayList<Vertex> vertices;
     ArrayList<Edge> edges;
     ArrayList<Vertex> zeroInDegreeVertices;
-    boolean directed;
+    private boolean directed;
 
     FloydWarshall floydWarshall;
 
     public Graph(boolean d) {
         // determine whether graph is directed or undirected
         directed = d;
+    }
+
+    public boolean isDirected() {
+        return directed;
     }
 
     public void addEdge(String first, String second, double weight) {
@@ -116,7 +120,7 @@ public class Graph {
             zeroInDegreeVertices = new ArrayList<Vertex>();
 
             weights = new double[1][1];
-            weights[0][0] = Double.POSITIVE_INFINITY;
+            weights[0][0] = 0;
         }
 
         // If there is at least one vertex
@@ -136,8 +140,12 @@ public class Graph {
                 weights = new double[vertices.size() + 1][vertices.size() + 1];
 
                 for (int i = 0; i < vertices.size() + 1; i++) {
-                    weights[i][vertices.size()] = Double.POSITIVE_INFINITY;
-                    weights[vertices.size()][i] = Double.POSITIVE_INFINITY;
+                    if (i == vertices.size())
+                        weights[i][vertices.size()] = 0;
+                    else {
+                        weights[i][vertices.size()] = Double.POSITIVE_INFINITY;
+                        weights[vertices.size()][i] = Double.POSITIVE_INFINITY;
+                    }
                 }
 
                 for (int i = 0; i < vertices.size(); i++)
@@ -201,8 +209,12 @@ public class Graph {
     public void defaultMatrix() {
         weights = new double[vertices.size()][vertices.size()];
         for (int i = 0; i < vertices.size(); i++)
-            for (int j = 0; j < vertices.size(); j++)
-                weights[i][j] = Double.POSITIVE_INFINITY;
+            for (int j = 0; j < vertices.size(); j++) {
+                if (i != j)
+                    weights[i][j] = Double.POSITIVE_INFINITY;
+                else
+                    weights[i][j] = 0;
+            }
 
         if (edges != null) {
             for (int i = 0; i < edges.size(); i++) {

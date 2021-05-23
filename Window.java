@@ -1,8 +1,4 @@
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.io.File;
-import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -70,12 +66,7 @@ public class Window extends JFrame {
     }
 
     public boolean isDirected() {
-        if (adjustments.dGraph.isSelected()) {
-            return true;
-        } else if (adjustments.uGraph.isSelected()) {
-            return false;
-        } else
-            return true;
+        return adjustments.getSelected();
     }
 
     public void setTool(int t) {
@@ -84,15 +75,5 @@ public class Window extends JFrame {
 
     public int getTool() {
         return tool;
-    }
-
-    // What font to use
-    public Font useFont(String path, int size) {
-        try {
-            return Font.createFont(Font.TRUETYPE_FONT, new File(path)).deriveFont(Font.PLAIN, size);
-        } catch (FontFormatException | IOException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 }
