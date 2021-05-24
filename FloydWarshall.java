@@ -1,11 +1,9 @@
 
 public class FloydWarshall {
-    Window window;
-    Graph g;
-    double[][] weight;
-    double[][] dist;
-    int V;
-    boolean run = false;
+    private double[][] dist;
+    private int V;
+    private boolean run = false;
+    private boolean satisfied;
 
     // public static void main(String[] args) {
     // GraphReader read = new GraphReader(new File(System.getProperty("user.dir") +
@@ -14,17 +12,12 @@ public class FloydWarshall {
     // new FloydWarshall(g);
     // }
 
-    public FloydWarshall(Window w) {
-        window = w;
-        g = window.graph;
+    public FloydWarshall(Graph g) {
         V = g.vertices.size();
-        weight = new double[V][V];
         dist = new double[V][V];
 
         initialize(g.weights);
 
-        Thread trace = new Thread(new AlgorithmTracing(window));
-        trace.start();
         // Algorithm
         // for (int k = 0; k < V; k++) {
         // // Source Vertex
@@ -45,12 +38,37 @@ public class FloydWarshall {
         // showMatrix();
     }
 
-    public void step(int k, int i, int j) {
+    public boolean isRunning() {
+        return run;
+    }
+
+    public void setRunning(boolean run) {
+        this.run = run;
+    }
+
+    public boolean satisfied() {
+        return satisfied;
+    }
+
+    public void start(Window window) {
+        run = true;
+        Thread trace = new Thread(new AlgorithmTracing(window));
+        trace.start();
+    }
+
+    public void compare(int k, int i, int j) {
+        satisfied = false;
         if (i != j) {
-            if (dist[i][j] > dist[i][k] + dist[k][j])
+            if (dist[i][j] > dist[i][k] + dist[k][j]) {
+                satisfied = true;
                 dist[i][j] = dist[i][k] + dist[k][j];
+            }
         } else
             dist[i][j] = 0;
+    }
+
+    public double getDist(int i, int j) {
+        return dist[i][j];
     }
 
     public void initialize(double[][] wGraph) {

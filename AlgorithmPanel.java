@@ -6,9 +6,16 @@ import javax.swing.JPanel;
 
 public class AlgorithmPanel extends JPanel {
     private Window window;
+    private int k = 0, i = 0, j = 0;
 
     public AlgorithmPanel(Window w) {
         window = w;
+    }
+
+    public void getIndex(int k, int i, int j) {
+        this.k = k;
+        this.i = i;
+        this.j = j;
     }
 
     @Override
@@ -17,7 +24,7 @@ public class AlgorithmPanel extends JPanel {
         setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.BLACK));
 
         if (window.floydWarshall != null) {
-            if (window.floydWarshall.run) {
+            if (window.floydWarshall.isRunning()) {
                 g.setColor(Color.BLACK);
                 g.drawOval(60, 120, 60, 60);
                 g.drawOval(170, 60, 60, 60);
@@ -26,6 +33,14 @@ public class AlgorithmPanel extends JPanel {
                 drawArrowLine(g, 90, 120, 170, 90, 5, 5);
                 drawArrowLine(g, 230, 90, 310, 120, 5, 5);
                 drawArrowLine(g, 120, 150, 280, 150, 5, 5);
+
+                g.drawString(window.graph.vertices.get(i).key, 85, 150);
+                g.drawString(window.graph.vertices.get(k).key, 195, 90);
+                g.drawString(window.graph.vertices.get(j).key, 305, 150);
+
+                g.drawString(Double.toString(window.floydWarshall.getDist(k, j)), 260, 90);
+                g.drawString(Double.toString(window.floydWarshall.getDist(i, k)), 110, 90);
+                g.drawString(Double.toString(window.floydWarshall.getDist(i, j)), 190, 175);
             }
         }
     }

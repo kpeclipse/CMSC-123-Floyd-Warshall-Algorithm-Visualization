@@ -73,6 +73,8 @@ public class ButtonPanel extends JPanel {
         adjust.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 window.setTool(0);
+                if (window.floydWarshall != null)
+                    window.floydWarshall = null;
             }
         });
 
@@ -111,6 +113,9 @@ public class ButtonPanel extends JPanel {
                     window.graph = new Graph(window.isDirected());
                     window.adjustments.disableRadioButton(window.adjustments.getSelected());
                 }
+
+                if (window.floydWarshall != null)
+                    window.floydWarshall = null;
             }
         });
 
@@ -124,18 +129,24 @@ public class ButtonPanel extends JPanel {
                     window.graph.edges = new ArrayList<Edge>();
                 }
 
+                if (window.floydWarshall != null)
+                    window.floydWarshall = null;
             }
         });
 
         removeVertex.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 window.setTool(4);
+                if (window.floydWarshall != null)
+                    window.floydWarshall = null;
             }
         });
 
         removeEdge.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 window.setTool(5);
+                if (window.floydWarshall != null)
+                    window.floydWarshall = null;
             }
         });
 
@@ -143,8 +154,8 @@ public class ButtonPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 window.setTool(6);
                 if (window.graph != null) {
-                    window.floydWarshall = new FloydWarshall(window);
-                    window.floydWarshall.run = true;
+                    window.floydWarshall = new FloydWarshall(window.graph);
+                    window.floydWarshall.start(window);
                 }
             }
         });
@@ -153,9 +164,10 @@ public class ButtonPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 window.setTool(7);
                 if (window.graph != null) {
+                    if (window.floydWarshall != null)
+                        window.floydWarshall = null;
                     window.adjustments.enableRadioButton(window.graph.isDirected());
                     window.graph = null;
-
                 }
             }
         });

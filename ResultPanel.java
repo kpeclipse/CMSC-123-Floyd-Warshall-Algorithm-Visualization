@@ -1,7 +1,10 @@
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Stroke;
+import java.awt.BasicStroke;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -12,7 +15,7 @@ public class ResultPanel extends JPanel {
     private JPanel tablePanel;
     private JScrollPane scrollPane;
 
-    private int x = 0, y = 0, k = 0;
+    private int x = -1, y = -1, k = -1;
 
     public ResultPanel(Window w) {
         window = w;
@@ -52,7 +55,14 @@ public class ResultPanel extends JPanel {
                         g.drawString(window.graph.vertices.get(i).key, 20, labelStartY);
 
                         // Write the edge weight
-                        g.drawString(Double.toString(window.graph.weights[0][i]), valueStartX, valueStartY);
+                        if (window.floydWarshall != null)
+                            g.drawString(Double.toString(window.floydWarshall.getDist(0, i)), valueStartX, valueStartY); // during
+                                                                                                                         // and
+                                                                                                                         // after
+                                                                                                                         // tracing
+                        else
+                            g.drawString(Double.toString(window.graph.weights[0][i]), valueStartX, valueStartY); // before
+                                                                                                                 // tracing
 
                         for (int j = 1; j < window.graph.vertices.size(); j++) {
                             valueStartY += 50;
@@ -60,7 +70,11 @@ public class ResultPanel extends JPanel {
                             g.drawRect(tableStartX + 50, tableStartY, 50, 50);
 
                             // Write edge weights
-                            g.drawString(Double.toString(window.graph.weights[j][i]), valueStartX, valueStartY);
+                            if (window.floydWarshall != null)
+                                g.drawString(Double.toString(window.floydWarshall.getDist(j, i)), valueStartX,
+                                        valueStartY);
+                            else
+                                g.drawString(Double.toString(window.graph.weights[j][i]), valueStartX, valueStartY);
                             tableStartX += 50;
 
                             if (tableStartX > endX)
@@ -77,11 +91,22 @@ public class ResultPanel extends JPanel {
                         }
                     }
 
-                    if (x != 0) {
-                        g.setColor(Color.RED);
-                        g.drawRect(50 + 50 * x, 30 + 50 * y, 50, 50);
-                        g.drawRect(50 + 50 * x, 30 + 50 * k, 50, 50);
-                        g.drawRect(50 + 50 * k, 30 + 50 * y, 50, 50);
+                    if (window.floydWarshall != null && window.floydWarshall.isRunning()) {
+                        Graphics2D redBox = (Graphics2D) g;
+                        Stroke prevRedStroke = redBox.getStroke();
+                        redBox.setStroke(new BasicStroke(2));
+                        redBox.setColor(Color.RED);
+                        redBox.drawRect(50 + 50 * k, 30 + 50 * x, 50, 50);
+                        redBox.drawRect(50 + 50 * y, 30 + 50 * k, 50, 50);
+                        if (window.floydWarshall.satisfied()) {
+                            redBox.setColor(Color.GREEN);
+                        }
+                        redBox.drawRect(50 + 50 * y, 30 + 50 * x, 50, 50);
+                        redBox.setStroke(prevRedStroke);
+                        // g.setColor(Color.RED);
+                        // g.drawRect(50 + 50 * x, 30 + 50 * y, 50, 50);
+                        // g.drawRect(50 + 50 * x, 30 + 50 * k, 50, 50);
+                        // g.drawRect(50 + 50 * k, 30 + 50 * y, 50, 50);
                     }
                 }
 
