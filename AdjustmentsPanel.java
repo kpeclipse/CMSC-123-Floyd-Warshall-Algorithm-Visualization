@@ -71,9 +71,9 @@ public class AdjustmentsPanel extends JPanel {
         slow.setFont(new Font("Arial", Font.PLAIN, 13));
         slow.setBounds(80, 325, 150, 30);
 
-        slider = new JSlider(JSlider.VERTICAL, 0, 10, 5);
+        slider = new JSlider(JSlider.VERTICAL, 1, 20, 5);
         slider.setMajorTickSpacing(1);
-        slider.setPaintTicks(true);
+        slider.setPaintTicks(false);
         slider.setBounds(30, 150, 30, 200);
 
         add(fast);

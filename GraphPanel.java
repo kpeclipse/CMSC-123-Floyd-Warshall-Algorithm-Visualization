@@ -4,15 +4,16 @@ import java.awt.Rectangle;
 import java.awt.Point;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
-import java.awt.Font;
-import java.awt.FontFormatException;
 import java.awt.Graphics;
-import java.io.File;
-import java.io.IOException;
+import java.awt.Graphics2D;
+import java.awt.Stroke;
+import java.awt.BasicStroke;
+import java.lang.Math;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+// Graph Visualisation
 public class GraphPanel extends JPanel {
     private Window window;
     private JPanel canvasPanel;
@@ -41,13 +42,19 @@ public class GraphPanel extends JPanel {
                     // DISPLAY VERTICES
                     if (window.graph.vertices != null) {
                         for (int i = 0; i < window.graph.vertices.size(); i++) {
-
+                            Graphics2D circle = (Graphics2D) g;
+                            Stroke prevStroke = circle.getStroke();
+                            circle.setStroke(new BasicStroke(3));
+                            circle.setColor(Color.BLACK);
+                            circle.drawOval(window.graph.vertices.get(i).getX() - 15,
+                                    window.graph.vertices.get(i).getY() - 15, 30, 30);
+                            circle.setStroke(prevStroke);
                             g.setColor(Color.PINK);
                             g.fillOval(window.graph.vertices.get(i).getX() - 15,
                                     window.graph.vertices.get(i).getY() - 15, 30, 30);
                             g.setColor(Color.BLACK);
                             g.drawString(window.graph.vertices.get(i).key, window.graph.vertices.get(i).getX() - 10,
-                                    window.graph.vertices.get(i).getY() - 15);
+                                    window.graph.vertices.get(i).getY() - 20);
                         }
                     }
 
@@ -56,20 +63,33 @@ public class GraphPanel extends JPanel {
                         for (int i = 0; i < window.graph.edges.size(); i++) {
                             g.setColor(Color.BLACK);
 
-                            if (!window.graph.isDirected()) { // If graph is undirected
-                                g.drawLine(window.graph.edges.get(i).first.getX(),
-                                        window.graph.edges.get(i).first.getY(), window.graph.edges.get(i).second.getX(),
-                                        window.graph.edges.get(i).second.getY());
-                            } else // If graph is directed
-                                drawArrowLine(g, window.graph.edges.get(i).first.getX(),
-                                        window.graph.edges.get(i).first.getY(), window.graph.edges.get(i).second.getX(),
-                                        window.graph.edges.get(i).second.getY(), 5, 5);
+                            double from = angleBetween(window.graph.edges.get(i).first.getX(),
+                                    window.graph.edges.get(i).first.getY(), window.graph.edges.get(i).second.getX(),
+                                    window.graph.edges.get(i).second.getY());
+                            double to = angleBetween(window.graph.edges.get(i).second.getX(),
+                                    window.graph.edges.get(i).second.getY(), window.graph.edges.get(i).first.getX(),
+                                    window.graph.edges.get(i).first.getY());
 
-                            g.drawString(Double.toString(window.graph.edges.get(i).value),
-                                    (window.graph.edges.get(i).first.getX() + window.graph.edges.get(i).second.getX())
-                                            / 2,
-                                    (window.graph.edges.get(i).first.getY() + window.graph.edges.get(i).second.getY())
-                                            / 2);
+                            Vertex first = window.graph.edges.get(i).first;
+                            Vertex second = window.graph.edges.get(i).second;
+                            double weight = window.graph.edges.get(i).value;
+
+                            if (!window.graph.isDirected()) { // If graph is undirected
+                                g.drawLine(getNewX(first.getX(), from, 15), getNewY(first.getY(), from, 15),
+                                        getNewX(second.getX(), to, 15), getNewY(second.getY(), to, 15));
+                            } else // If graph is directed
+                                drawArrowLine(g, getNewX(first.getX(), from, 15), getNewY(first.getY(), from, 15),
+                                        getNewX(second.getX(), to, 15), getNewY(second.getY(), to, 15), 5, 5);
+
+                            g.setColor(new Color(102, 0, 153)); // Purple
+                            if ((first.getX() > second.getX() && first.getY() <= second.getY())
+                                    || (first.getX() > second.getX() && first.getY() > second.getY()))
+                                g.drawString(Double.toString(weight), ((first.getX() + second.getX()) / 2) - 25,
+                                        (first.getY() + second.getY()) / 2);
+                            else if ((first.getX() <= second.getX() && first.getY() <= second.getY())
+                                    || (first.getX() <= second.getX() && first.getY() > second.getY()))
+                                g.drawString(Double.toString(weight), ((first.getX() + second.getX()) / 2) + 15,
+                                        (first.getY() + second.getY()) / 2);
                         }
                     }
                     updateUI();
@@ -257,16 +277,6 @@ public class GraphPanel extends JPanel {
         return panel;
     }
 
-    // What font to use
-    public Font useFont(String path, int size) {
-        try {
-            return Font.createFont(Font.TRUETYPE_FONT, new File(path)).deriveFont(Font.PLAIN, size);
-        } catch (FontFormatException | IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     // method to draw a directed arrowline
     private void drawArrowLine(Graphics g, int x1, int y1, int x2, int y2, int d, int h) {
         int dx = x2 - x1, dy = y2 - y1;
@@ -309,5 +319,25 @@ public class GraphPanel extends JPanel {
         }
 
         return null;
+    }
+
+    public double angleBetween(int x1, int y1, int x2, int y2) {
+        double deltaX = x2 - x1;
+        double deltaY = y2 - y1;
+
+        double rotation = -Math.atan2(deltaX, deltaY);
+        rotation = Math.toRadians(Math.toDegrees(rotation) + 180);
+
+        return rotation;
+    }
+
+    public int getNewX(int centerX, double angle, double radius) {
+        angle = angle - Math.toRadians(90.0);
+        return (int) Math.round((float) (centerX + Math.cos(angle) * radius));
+    }
+
+    public int getNewY(int centerY, double angle, double radius) {
+        angle = angle - Math.toRadians(90.0);
+        return (int) Math.round((float) (centerY + Math.sin(angle) * radius));
     }
 }

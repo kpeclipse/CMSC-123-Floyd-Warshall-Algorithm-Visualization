@@ -26,7 +26,7 @@ public class ResultPanel extends JPanel {
     public JPanel setTablePanel() {
         JPanel panel = new JPanel();
         panel.setSize(400, 425);
-        panel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, Color.BLACK));
+        panel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 1, Color.BLACK));
 
         tablePanel = new JPanel(null) {
             @Override

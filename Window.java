@@ -46,8 +46,8 @@ public class Window extends JFrame {
         buttons.setBounds(950, 0, 250, 300);
         adjustments.setBounds(950, 300, 250, 425);
         display.setBounds(400, 0, 550, height);
-        data.setBounds(0, 0, 400, 425);
-        algorithm.setBounds(0, 425, 400, 300);
+        data.setBounds(0, 265, 400, 425);
+        algorithm.setBounds(0, 0, 400, 265);
 
         add(buttons);
         add(adjustments);

@@ -2,9 +2,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class GraphReader {
     private File file;
+    private ArrayList<Integer> xBounds = new ArrayList<Integer>();
+    private ArrayList<Integer> yBounds = new ArrayList<Integer>();
     Graph g;
 
     public GraphReader(File f) {

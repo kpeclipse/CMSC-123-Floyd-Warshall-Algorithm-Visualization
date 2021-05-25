@@ -18,22 +18,12 @@ public class FloydWarshall {
 
         initialize(g.weights);
 
-        // Algorithm
-        // for (int k = 0; k < V; k++) {
-        // // Source Vertex
-        // for (int i = 0; i < V; i++)
-        // // Destination Vertex
-        // for (int j = 0; j < V; j++) {
-        // if (i != j) {
-        // if (dist[i][j] > dist[i][k] + dist[k][j])
-        // dist[i][j] = dist[i][k] + dist[k][j];
-        // }
-
-        // else
-        // dist[i][j] = 0;
-        // }
-        // }
-        // }
+        /**
+         * // Algorithm for (int k = 0; k < V; k++) { // Source Vertex for (int i = 0; i
+         * < V; i++) // Destination Vertex for (int j = 0; j < V; j++) { if (i != j) {
+         * if (dist[i][j] > dist[i][k] + dist[k][j]) dist[i][j] = dist[i][k] +
+         * dist[k][j]; } else dist[i][j] = 0; } } }
+         */
 
         // showMatrix();
     }

@@ -4,7 +4,6 @@ public class AlgorithmTracing implements Runnable {
 
     public AlgorithmTracing(Window w) {
         window = w;
-        speed = window.adjustments.getSpeed();
     }
 
     @Override
@@ -20,7 +19,8 @@ public class AlgorithmTracing implements Runnable {
                             window.algorithm.getIndex(k, i, j);
                             window.data.paintTablePanel(k, i, j);
                             window.algorithm.getIndex(k, i, j);
-                            Thread.sleep(1000 / speed);
+                            speed = window.adjustments.getSpeed();
+                            Thread.sleep(2000 / speed);
                         }
                 window.floydWarshall.setRunning(false);
             } catch (Exception e) {
