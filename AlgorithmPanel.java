@@ -1,5 +1,9 @@
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Stroke;
+import java.awt.BasicStroke;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -22,27 +26,67 @@ public class AlgorithmPanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.BLACK));
+        g.setFont(new Font("Arial", Font.BOLD, 16));
+        g.drawString("FLOYD-WARSHALL ALGORITHM:", 20, 20);
 
         if (window.floydWarshall != null) {
             if (window.floydWarshall.isRunning()) {
+                Graphics2D circle = (Graphics2D) g;
+                Stroke prevStroke = circle.getStroke();
+                circle.setStroke(new BasicStroke(3));
+                circle.setColor(Color.BLUE);
+                circle.drawOval(60, 220, 40, 40);
+                circle.setColor(Color.RED);
+                circle.drawOval(170, 160, 40, 40);
+                circle.setColor(Color.RED);
+                circle.drawOval(280, 220, 40, 40);
+                circle.setStroke(prevStroke);
+                // g.drawOval(60, 120, 60, 60);
+                // g.drawOval(170, 60, 60, 60);
+                // g.drawOval(280, 120, 60, 60);
+
                 g.setColor(Color.BLACK);
-                g.drawOval(60, 120, 60, 60);
-                g.drawOval(170, 60, 60, 60);
-                g.drawOval(280, 120, 60, 60);
+                drawArrowLine(g, 90, 220, 170, 180, 5, 5);
+                drawArrowLine(g, 210, 180, 300, 220, 5, 5);
+                drawArrowLine(g, 100, 240, 280, 240, 5, 5);
 
-                drawArrowLine(g, 90, 120, 170, 90, 5, 5);
-                drawArrowLine(g, 230, 90, 310, 120, 5, 5);
-                drawArrowLine(g, 120, 150, 280, 150, 5, 5);
+                g.setFont(new Font("Arial", Font.PLAIN, 15));
+                g.drawString("for k --> " + k, 20, 50);
+                g.drawString("for i --> " + i, 40, 70);
+                g.drawString("for j --> " + j, 60, 90);
+                g.drawString("dist[" + i + "][" + j + "] > dist[" + i + "][" + k + "] + dist[" + k + "][" + j + "]", 80,
+                        120);
+                if (window.floydWarshall.satisfied())
+                    g.setColor(Color.GREEN);
+                else
+                    g.setColor(Color.RED);
 
-                g.drawString(window.graph.vertices.get(i).key, 85, 150);
-                g.drawString(window.graph.vertices.get(k).key, 195, 90);
-                g.drawString(window.graph.vertices.get(j).key, 305, 150);
+                g.drawString(window.floydWarshall.getDist(i, j) + " > " + window.floydWarshall.getDist(i, k) + " + "
+                        + window.floydWarshall.getDist(k, j), 80, 140);
 
-                g.drawString(Double.toString(window.floydWarshall.getDist(k, j)), 260, 90);
-                g.drawString(Double.toString(window.floydWarshall.getDist(i, k)), 110, 90);
-                g.drawString(Double.toString(window.floydWarshall.getDist(i, j)), 190, 175);
-            }
+                g.setColor(Color.BLACK);
+                g.setFont(new Font("Arial", Font.BOLD, 13));
+                g.drawString(window.graph.vertices.get(i).key, 75, 240);
+                g.drawString(window.graph.vertices.get(k).key, 185, 180);
+                g.drawString(window.graph.vertices.get(j).key, 295, 240);
+
+                g.drawString(Double.toString(window.floydWarshall.getDist(k, j)), 250, 180);
+                g.drawString(Double.toString(window.floydWarshall.getDist(i, k)), 100, 180);
+                g.drawString(Double.toString(window.floydWarshall.getDist(i, j)), 180, 225);
+            } else
+                showAlgorithm(g);
+        } else {
+            showAlgorithm(g);
         }
+    }
+
+    private void showAlgorithm(Graphics g) {
+        g.setFont(new Font("Arial", Font.PLAIN, 15));
+        g.drawString("for k --> 0 to (number of vertices - 1)", 20, 50);
+        g.drawString("for i --> 0 to (number of vertices - 1)", 40, 70);
+        g.drawString("for j --> 0 to (number of vertices - 1)", 60, 90);
+        g.drawString("if dist [ i ] [ j ]  >  dist [ i ] [ k ] + dist [ k ] [ j ]", 80, 120);
+        g.drawString("then dist [ i ] [ j ]  =  dist [ i ] [ k ] + dist [ k ] [ j ]", 80, 140);
     }
 
     private void drawArrowLine(Graphics g, int x1, int y1, int x2, int y2, int d, int h) {

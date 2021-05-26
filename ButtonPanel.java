@@ -82,6 +82,8 @@ public class ButtonPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 // opens jfile chooser to parse graph
                 window.setTool(1);
+                createGraph();
+
                 JFileChooser j = new JFileChooser();
 
                 // only allow files of .txt extension
@@ -95,10 +97,11 @@ public class ButtonPanel extends JPanel {
                     // creates readgraph object and sets the window graph to the graph in that
                     // object
                     File graphFile = j.getSelectedFile();
-                    readg = new GraphReader(graphFile);
-                    window.graph = readg.g;
+                    readg = new GraphReader(window, graphFile);
+                    window.graph = readg.getGraph();
+                    window.display.repaint();
                 } else if (result == JFileChooser.CANCEL_OPTION) {
-                    System.out.println("Cancel was selected");
+                    // System.out.println("Cancel was selected");
                 }
 
             }
@@ -107,15 +110,9 @@ public class ButtonPanel extends JPanel {
         inputVertex.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 window.setTool(2);
-                // creates a directed graph
-                if (window.graph == null) { // if in case user clicks button again and there is an existing graph
-                    // window.graph = new Graph(true);
-                    window.graph = new Graph(window.isDirected());
-                    window.adjustments.disableRadioButton(window.adjustments.getSelected());
-                }
-
-                if (window.floydWarshall != null)
-                    window.floydWarshall = null;
+                // creates a graph
+                createGraph();
+                nullFloydWarshall();
             }
         });
 
@@ -129,24 +126,21 @@ public class ButtonPanel extends JPanel {
                     window.graph.edges = new ArrayList<Edge>();
                 }
 
-                if (window.floydWarshall != null)
-                    window.floydWarshall = null;
+                nullFloydWarshall();
             }
         });
 
         removeVertex.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 window.setTool(4);
-                if (window.floydWarshall != null)
-                    window.floydWarshall = null;
+                nullFloydWarshall();
             }
         });
 
         removeEdge.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 window.setTool(5);
-                if (window.floydWarshall != null)
-                    window.floydWarshall = null;
+                nullFloydWarshall();
             }
         });
 
@@ -164,10 +158,8 @@ public class ButtonPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 window.setTool(7);
                 if (window.graph != null) {
-                    if (window.floydWarshall != null)
-                        window.floydWarshall = null;
-                    window.adjustments.enableRadioButton(window.graph.isDirected());
-                    window.graph = null;
+                    nullFloydWarshall();
+                    nullGraph();
                 }
             }
         });
@@ -371,5 +363,23 @@ public class ButtonPanel extends JPanel {
             public void mousePressed(MouseEvent e) {
             }
         });
+    }
+
+    public void createGraph() {
+        if (window.graph == null) { // if in case user clicks button again and there is an existing graph
+            // window.graph = new Graph(true);
+            window.graph = new Graph(window.isDirected());
+            window.adjustments.disableRadioButton(window.adjustments.getSelected());
+        }
+    }
+
+    public void nullGraph() {
+        window.adjustments.enableRadioButton(window.graph.isDirected());
+        window.graph = null;
+    }
+
+    public void nullFloydWarshall() {
+        if (window.floydWarshall != null)
+            window.floydWarshall = null;
     }
 }

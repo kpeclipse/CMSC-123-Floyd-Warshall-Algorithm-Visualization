@@ -34,40 +34,38 @@ public class ResultPanel extends JPanel {
                 super.paintComponent(g);
 
                 int endX = 300, endY = 315;
-                int tableStartX = 50, tableStartY = 30;
+                int tableStartX = 50, tableStartY = 100;
                 int labelStartX = tableStartX + 20, labelStartY = tableStartY + 30;
-                int valueStartX = 60, valueStartY = 55;
+                int valueStartX = 60, valueStartY = 125;
+
+                g.setFont(new Font("Arial", Font.BOLD, 16));
+                g.drawString("COST TABLE", 20, 20);
 
                 if (window.graph != null && window.graph.vertices != null) {
                     g.setColor(Color.BLACK);
 
                     for (int i = 0; i < window.graph.vertices.size(); i++) {
                         tableStartX = 50;
-                        valueStartY = 55;
+                        valueStartY = 125;
                         // Draw first box in a row
-                        g.drawRect(tableStartX, tableStartY, 50, 50);
+                        g.drawRect(tableStartX, tableStartY, 60, 60);
 
-                        Font font = new Font("Arial", Font.PLAIN, 13);
-                        g.setFont(font);
+                        g.setFont(new Font("Arial", Font.BOLD, 13));
 
                         // Write the vertices
-                        g.drawString(window.graph.vertices.get(i).key, labelStartX, 20);
+                        g.drawString(window.graph.vertices.get(i).key, labelStartX, 80);
                         g.drawString(window.graph.vertices.get(i).key, 20, labelStartY);
 
                         // Write the edge weight
-                        if (window.floydWarshall != null)
-                            g.drawString(Double.toString(window.floydWarshall.getDist(0, i)), valueStartX, valueStartY); // during
-                                                                                                                         // and
-                                                                                                                         // after
-                                                                                                                         // tracing
-                        else
-                            g.drawString(Double.toString(window.graph.weights[0][i]), valueStartX, valueStartY); // before
-                                                                                                                 // tracing
+                        if (window.floydWarshall != null) // During Tracing
+                            g.drawString(Double.toString(window.floydWarshall.getDist(0, i)), valueStartX, valueStartY);
+                        else // Before Tracing
+                            g.drawString(Double.toString(window.graph.weights[0][i]), valueStartX, valueStartY);
 
                         for (int j = 1; j < window.graph.vertices.size(); j++) {
-                            valueStartY += 50;
+                            valueStartY += 60;
                             // Draw boxes
-                            g.drawRect(tableStartX + 50, tableStartY, 50, 50);
+                            g.drawRect(tableStartX + 60, tableStartY, 60, 60);
 
                             // Write edge weights
                             if (window.floydWarshall != null)
@@ -75,51 +73,37 @@ public class ResultPanel extends JPanel {
                                         valueStartY);
                             else
                                 g.drawString(Double.toString(window.graph.weights[j][i]), valueStartX, valueStartY);
-                            tableStartX += 50;
+                            tableStartX += 60;
 
                             if (tableStartX > endX)
-                                endX = tableStartX + 50;
+                                endX = tableStartX + 60;
                         }
 
-                        tableStartY += 50;
-                        labelStartX += 50;
-                        labelStartY += 50;
-                        valueStartX += 50;
+                        tableStartY += 60;
+                        labelStartX += 60;
+                        labelStartY += 60;
+                        valueStartX += 60;
 
                         if (tableStartY > endY) {
-                            endY = tableStartY + 50;
+                            endY = tableStartY + 60;
                         }
                     }
 
+                    // Highlight Edges
                     if (window.floydWarshall != null && window.floydWarshall.isRunning()) {
                         Graphics2D redBox = (Graphics2D) g;
                         Stroke prevRedStroke = redBox.getStroke();
                         redBox.setStroke(new BasicStroke(2));
                         redBox.setColor(Color.RED);
-                        redBox.drawRect(50 + 50 * k, 30 + 50 * x, 50, 50);
-                        redBox.drawRect(50 + 50 * y, 30 + 50 * k, 50, 50);
+                        redBox.drawRect(50 + 60 * k, 100 + 60 * x, 60, 60); // dist[i][k]
+                        redBox.drawRect(50 + 60 * y, 100 + 60 * k, 60, 60); // dist[k][j]
                         if (window.floydWarshall.satisfied()) {
                             redBox.setColor(Color.GREEN);
                         }
-                        redBox.drawRect(50 + 50 * y, 30 + 50 * x, 50, 50);
+                        redBox.drawRect(50 + 60 * y, 100 + 60 * x, 60, 60); // dist[i][j]
                         redBox.setStroke(prevRedStroke);
-                        // g.setColor(Color.RED);
-                        // g.drawRect(50 + 50 * x, 30 + 50 * y, 50, 50);
-                        // g.drawRect(50 + 50 * x, 30 + 50 * k, 50, 50);
-                        // g.drawRect(50 + 50 * k, 30 + 50 * y, 50, 50);
                     }
                 }
-
-                // if (window.graph.vertices != null)
-                // if (floydWarshall.dist != null) {
-                // for (int i = 0; i < window.graph.vertices.size(); i++)
-                // for (int j = 0; j < window.graph.vertices.size(); i++) {
-                // g.setColor(Color.BLACK);
-                // g.drawRect(tableStartX, tableStartY, 10, 10);
-                // tableStartX += 10;
-                // tableStartY += 10;
-                // }
-                // }
                 setPreferredSize(new Dimension(endX + 60, endY + 30));
                 revalidate();
                 repaint();

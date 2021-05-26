@@ -16,11 +16,12 @@ public class AlgorithmTracing implements Runnable {
                     for (int i = 0; i < window.graph.vertices.size(); i++)
                         for (int j = 0; j < window.graph.vertices.size(); j++) {
                             window.floydWarshall.compare(k, i, j);
+                            window.display.highlightVertices(k, i, j);
                             window.algorithm.getIndex(k, i, j);
                             window.data.paintTablePanel(k, i, j);
                             window.algorithm.getIndex(k, i, j);
                             speed = window.adjustments.getSpeed();
-                            Thread.sleep(2000 / speed);
+                            Thread.sleep(3000 / speed);
                         }
                 window.floydWarshall.setRunning(false);
             } catch (Exception e) {

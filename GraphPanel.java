@@ -21,6 +21,7 @@ public class GraphPanel extends JPanel {
     private String second = null;
 
     private int startX = 50, startY = 50;
+    private int k = -1, x = -1, y = -1;
 
     public GraphPanel(Window w) {
         window = w;
@@ -49,7 +50,18 @@ public class GraphPanel extends JPanel {
                             circle.drawOval(window.graph.vertices.get(i).getX() - 15,
                                     window.graph.vertices.get(i).getY() - 15, 30, 30);
                             circle.setStroke(prevStroke);
-                            g.setColor(Color.PINK);
+
+                            // For Algorithm Tracing
+                            if (window.floydWarshall != null && window.floydWarshall.isRunning()) {
+                                if (i == x)
+                                    g.setColor(Color.BLUE);
+                                else if (i == k || i == y)
+                                    g.setColor(Color.RED);
+                                else
+                                    g.setColor(Color.PINK);
+                            } else
+                                g.setColor(Color.PINK);
+
                             g.fillOval(window.graph.vertices.get(i).getX() - 15,
                                     window.graph.vertices.get(i).getY() - 15, 30, 30);
                             g.setColor(Color.BLACK);
@@ -207,10 +219,8 @@ public class GraphPanel extends JPanel {
                                 for (Vertex v : window.graph.vertices) {
                                     if (v.key.equals(removeVertex)) {
                                         window.graph.removeVertex(v);
-                                        if (window.graph.vertices.size() == 0) {
-                                            window.adjustments.enableRadioButton(window.graph.isDirected());
-                                            window.graph = null;
-                                        }
+                                        if (window.graph.vertices.size() == 0)
+                                            window.buttons.nullGraph();
                                         break;
                                     }
                                 }
@@ -339,5 +349,11 @@ public class GraphPanel extends JPanel {
     public int getNewY(int centerY, double angle, double radius) {
         angle = angle - Math.toRadians(90.0);
         return (int) Math.round((float) (centerY + Math.sin(angle) * radius));
+    }
+
+    public void highlightVertices(int k, int i, int j) {
+        x = i;
+        y = j;
+        this.k = k;
     }
 }
