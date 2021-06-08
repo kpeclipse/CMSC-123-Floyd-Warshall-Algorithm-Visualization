@@ -102,9 +102,9 @@ public class Graph {
     public void removeEdge(Vertex firstV, Vertex secondV, double weight) {
         for (int i = 0; i < edges.size(); i++) {
             if (edges.get(i).first == firstV && edges.get(i).second == secondV && edges.get(i).value == weight) {
-                weights[vertices.indexOf(firstV)][vertices.indexOf(secondV)] = 0;
+                weights[vertices.indexOf(firstV)][vertices.indexOf(secondV)] = Double.POSITIVE_INFINITY;
                 if (!directed)
-                    weights[vertices.indexOf(secondV)][vertices.indexOf(firstV)] = 0;
+                    weights[vertices.indexOf(secondV)][vertices.indexOf(firstV)] = Double.POSITIVE_INFINITY;
                 edges.remove(i);
                 break;
             }

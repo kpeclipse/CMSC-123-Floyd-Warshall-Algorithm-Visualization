@@ -9,7 +9,7 @@ public class AlgorithmTracing implements Runnable {
     @Override
     public void run() {
         int k = 0;
-        while (k < window.graph.vertices.size()) {
+        while (window != null && k < window.graph.vertices.size()) {
             try {
                 // The Floyd-Warshall Algorithm
                 for (k = 0; k < window.graph.vertices.size(); k++)
@@ -19,9 +19,13 @@ public class AlgorithmTracing implements Runnable {
                             window.display.highlightVertices(k, i, j);
                             window.algorithm.getIndex(k, i, j);
                             window.data.paintTablePanel(k, i, j);
-                            window.algorithm.getIndex(k, i, j);
                             speed = window.adjustments.getSpeed();
-                            Thread.sleep(3000 / speed);
+                            Thread.sleep(2000 / speed);
+
+                            if (window.floydWarshall.satisfied()) {
+                                window.floydWarshall.setDist(k, i, j);
+                                Thread.sleep(2000);
+                            }
                         }
                 window.floydWarshall.setRunning(false);
             } catch (Exception e) {

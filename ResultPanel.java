@@ -98,7 +98,7 @@ public class ResultPanel extends JPanel {
                         redBox.drawRect(50 + 60 * k, 100 + 60 * x, 60, 60); // dist[i][k]
                         redBox.drawRect(50 + 60 * y, 100 + 60 * k, 60, 60); // dist[k][j]
                         if (window.floydWarshall.satisfied()) {
-                            redBox.setColor(Color.GREEN);
+                            redBox.setColor(new Color(0, 100, 0));
                         }
                         redBox.drawRect(50 + 60 * y, 100 + 60 * x, 60, 60); // dist[i][j]
                         redBox.setStroke(prevRedStroke);

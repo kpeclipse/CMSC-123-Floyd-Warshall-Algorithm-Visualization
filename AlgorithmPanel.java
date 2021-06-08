@@ -35,20 +35,17 @@ public class AlgorithmPanel extends JPanel {
                 Stroke prevStroke = circle.getStroke();
                 circle.setStroke(new BasicStroke(3));
                 circle.setColor(Color.BLUE);
-                circle.drawOval(60, 220, 40, 40);
+                circle.drawOval(60, 210, 40, 40); // i node
                 circle.setColor(Color.RED);
-                circle.drawOval(170, 160, 40, 40);
+                circle.drawOval(170, 160, 40, 40); // k node
                 circle.setColor(Color.RED);
-                circle.drawOval(280, 220, 40, 40);
+                circle.drawOval(280, 210, 40, 40); // j node
                 circle.setStroke(prevStroke);
-                // g.drawOval(60, 120, 60, 60);
-                // g.drawOval(170, 60, 60, 60);
-                // g.drawOval(280, 120, 60, 60);
 
                 g.setColor(Color.BLACK);
-                drawArrowLine(g, 90, 220, 170, 180, 5, 5);
-                drawArrowLine(g, 210, 180, 300, 220, 5, 5);
-                drawArrowLine(g, 100, 240, 280, 240, 5, 5);
+                drawArrowLine(g, 90, 210, 170, 180, 5, 5); // from i to k
+                drawArrowLine(g, 210, 180, 300, 210, 5, 5); // from k to j
+                drawArrowLine(g, 100, 230, 280, 230, 5, 5); // from i to j
 
                 g.setFont(new Font("Arial", Font.PLAIN, 15));
                 g.drawString("for k --> " + k, 20, 50);
@@ -57,7 +54,7 @@ public class AlgorithmPanel extends JPanel {
                 g.drawString("dist[" + i + "][" + j + "] > dist[" + i + "][" + k + "] + dist[" + k + "][" + j + "]", 80,
                         120);
                 if (window.floydWarshall.satisfied())
-                    g.setColor(Color.GREEN);
+                    g.setColor(new Color(0, 100, 0));
                 else
                     g.setColor(Color.RED);
 
@@ -66,12 +63,12 @@ public class AlgorithmPanel extends JPanel {
 
                 g.setColor(Color.BLACK);
                 g.setFont(new Font("Arial", Font.BOLD, 13));
-                g.drawString(window.graph.vertices.get(i).key, 75, 240);
-                g.drawString(window.graph.vertices.get(k).key, 185, 180);
-                g.drawString(window.graph.vertices.get(j).key, 295, 240);
+                g.drawString(window.graph.vertices.get(i).key, 75, 230); // i node
+                g.drawString(window.graph.vertices.get(k).key, 185, 180); // k node
+                g.drawString(window.graph.vertices.get(j).key, 295, 230); // j node
 
-                g.drawString(Double.toString(window.floydWarshall.getDist(k, j)), 250, 180);
                 g.drawString(Double.toString(window.floydWarshall.getDist(i, k)), 100, 180);
+                g.drawString(Double.toString(window.floydWarshall.getDist(k, j)), 250, 180);
                 g.drawString(Double.toString(window.floydWarshall.getDist(i, j)), 180, 225);
             } else
                 showAlgorithm(g);

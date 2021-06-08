@@ -148,8 +148,10 @@ public class ButtonPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 window.setTool(6);
                 if (window.graph != null) {
-                    window.floydWarshall = new FloydWarshall(window.graph);
-                    window.floydWarshall.start(window);
+                    if (window.floydWarshall == null) {
+                        window.floydWarshall = new FloydWarshall(window.graph);
+                        window.floydWarshall.start(window);
+                    }
                 }
             }
         });
@@ -379,7 +381,9 @@ public class ButtonPanel extends JPanel {
     }
 
     public void nullFloydWarshall() {
-        if (window.floydWarshall != null)
+        if (window.floydWarshall != null) {
+            window.floydWarshall.stop();
             window.floydWarshall = null;
+        }
     }
 }

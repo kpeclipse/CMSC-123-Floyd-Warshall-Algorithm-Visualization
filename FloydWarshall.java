@@ -3,7 +3,8 @@ public class FloydWarshall {
     private double[][] dist;
     private int V;
     private boolean run = false;
-    private boolean satisfied;
+    private boolean satisfied = false;
+    private Thread trace;
 
     // public static void main(String[] args) {
     // GraphReader read = new GraphReader(new File(System.getProperty("user.dir") +
@@ -42,8 +43,12 @@ public class FloydWarshall {
 
     public void start(Window window) {
         run = true;
-        Thread trace = new Thread(new AlgorithmTracing(window));
+        trace = new Thread(new AlgorithmTracing(window));
         trace.start();
+    }
+
+    public void stop() {
+        trace.interrupt();
     }
 
     public void compare(int k, int i, int j) {
@@ -51,7 +56,7 @@ public class FloydWarshall {
         if (i != j) {
             if (dist[i][j] > dist[i][k] + dist[k][j]) {
                 satisfied = true;
-                dist[i][j] = dist[i][k] + dist[k][j];
+                // dist[i][j] = dist[i][k] + dist[k][j];
             }
         } else
             dist[i][j] = 0;
@@ -59,6 +64,10 @@ public class FloydWarshall {
 
     public double getDist(int i, int j) {
         return dist[i][j];
+    }
+
+    public void setDist(int k, int i, int j) {
+        dist[i][j] = dist[i][k] + dist[k][j];
     }
 
     public void initialize(double[][] wGraph) {
