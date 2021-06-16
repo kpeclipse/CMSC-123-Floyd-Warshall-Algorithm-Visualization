@@ -36,7 +36,6 @@ public class GraphReader {
         boolean readVertex = false;
         boolean readEdge = false;
         String line;
-        int numberOfVertices = 0;
         Random r = new Random();
         int setX = 0;
         int setY = 0;
@@ -77,7 +76,6 @@ public class GraphReader {
                     }
 
                     graph.addVertex(line, setX, setY);
-                    numberOfVertices = graph.vertices.size();
                 }
 
                 if (readEdge) {

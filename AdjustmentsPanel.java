@@ -12,13 +12,86 @@ public class AdjustmentsPanel extends JPanel {
     private JRadioButton dGraph;
     private JRadioButton uGraph;
     private JSlider slider;
+    private JLabel update;
+    private JLabel first;
+    private JLabel second;
 
     public AdjustmentsPanel(Window w) {
         setLayout(null);
         setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Color.BLACK));
 
+        setDisplay();
         setRadioButtons();
         setSimulationSpeed();
+    }
+
+    public void updateDisplay(int tool) {
+        switch (tool) {
+            case 1:
+                update.setText("Tool: Insert Graph");
+                emptyVertices();
+                break;
+            case 2:
+                update.setText("Tool: Insert Vertex");
+                emptyVertices();
+                break;
+            case 3:
+                update.setText("Tool: Insert Edge");
+                resetVertices();
+                break;
+            case 4:
+                update.setText("Tool: Remove Vertex");
+                emptyVertices();
+                break;
+            case 5:
+                update.setText("Tool: Remove Edge");
+                resetVertices();
+                break;
+            case 6:
+                update.setText("Tool: Start");
+                emptyVertices();
+                break;
+            case 7:
+                update.setText("Tool: Reset");
+                emptyVertices();
+                break;
+        }
+    }
+
+    public void resetVertices() {
+        first.setText("Source Vertex:");
+        second.setText("Destination Vertex:");
+    }
+
+    public void emptyVertices() { // In case source and destination vertices are not needed
+        first.setText("");
+        second.setText("");
+    }
+
+    public void setSourceVertex(String key) {
+        if (key != null)
+            first.setText("Source Vertex: " + key);
+    }
+
+    public void setDestinationVertex(String key) {
+        second.setText("Destination Vertex: " + key);
+    }
+
+    public void setDisplay() {
+        update = new JLabel("Tool:");
+        first = new JLabel();
+        second = new JLabel();
+
+        update.setFont(new Font("Arial", Font.PLAIN, 13));
+        first.setFont(new Font("Arial", Font.PLAIN, 13));
+        second.setFont(new Font("Arial", Font.PLAIN, 13));
+
+        update.setBounds(10, 5, 200, 18);
+        first.setBounds(10, 23, 200, 18);
+        second.setBounds(10, 41, 200, 18);
+        add(update);
+        add(first);
+        add(second);
     }
 
     public void disableRadioButton(boolean directed) {

@@ -9,21 +9,24 @@ import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.filechooser.*;
 import javax.swing.JFileChooser;
+import javax.swing.SwingConstants;
 
 public class ButtonPanel extends JPanel {
     private Window window;
     private GraphReader readg;
 
+    private JLabel tools;
     private JButton inputGraph;
     private JButton inputVertex;
     private JButton inputEdge;
     private JButton removeVertex;
     private JButton removeEdge;
-    private JButton adjust;
+    // private JButton adjust;
     private JButton start;
     private JButton reset;
 
@@ -34,13 +37,17 @@ public class ButtonPanel extends JPanel {
         setBorder(BorderFactory.createMatteBorder(0, 1, 1, 0, Color.BLACK));
         // setBackground(Color.BLACK);
 
+        tools = new JLabel("TOOLS", SwingConstants.CENTER);
+        tools.setFont(new Font("Arial", Font.PLAIN, 13));
+        add(tools);
+
         setButtons();
         setActionAndMouseListeners();
     }
 
     // Initialize buttons
     public void setButtons() {
-        adjust = setButton("ADJUST", new Font("Arial", Font.PLAIN, 13));
+        // adjust = setButton("ADJUST", new Font("Arial", Font.PLAIN, 13));
         inputGraph = setButton("INPUT GRAPH", new Font("Arial", Font.PLAIN, 13));
         inputVertex = setButton("INPUT VERTEX", new Font("Arial", Font.PLAIN, 13));
         inputEdge = setButton("INPUT EDGE", new Font("Arial", Font.PLAIN, 13));
@@ -49,7 +56,7 @@ public class ButtonPanel extends JPanel {
         start = setButton("START", new Font("Arial", Font.PLAIN, 13));
         reset = setButton("RESET", new Font("Arial", Font.PLAIN, 13));
 
-        add(adjust);
+        // add(adjust);
         add(inputGraph);
         add(inputVertex);
         add(inputEdge);
@@ -70,18 +77,19 @@ public class ButtonPanel extends JPanel {
     }
 
     public void setActionAndMouseListeners() {
-        adjust.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                window.setTool(0);
-                if (window.floydWarshall != null)
-                    window.floydWarshall = null;
-            }
-        });
+        // adjust.addActionListener(new ActionListener() {
+        // public void actionPerformed(ActionEvent e) {
+        // window.setTool(0);
+        // if (window.floydWarshall != null)
+        // window.floydWarshall = null;
+        // }
+        // });
 
         inputGraph.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // opens jfile chooser to parse graph
                 window.setTool(1);
+                window.adjustments.updateDisplay(1);
                 createGraph();
 
                 JFileChooser j = new JFileChooser();
@@ -110,6 +118,7 @@ public class ButtonPanel extends JPanel {
         inputVertex.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 window.setTool(2);
+                window.adjustments.updateDisplay(2);
                 // creates a graph
                 createGraph();
                 nullFloydWarshall();
@@ -119,6 +128,7 @@ public class ButtonPanel extends JPanel {
         inputEdge.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 window.setTool(3);
+                window.adjustments.updateDisplay(3);
                 // creates a directed graph
                 // if in case graph has only one or no vertices
                 if (window.graph != null && window.graph.vertices != null && window.graph.vertices.size() > 1
@@ -133,6 +143,7 @@ public class ButtonPanel extends JPanel {
         removeVertex.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 window.setTool(4);
+                window.adjustments.updateDisplay(4);
                 nullFloydWarshall();
             }
         });
@@ -140,18 +151,25 @@ public class ButtonPanel extends JPanel {
         removeEdge.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 window.setTool(5);
+                window.adjustments.updateDisplay(5);
                 nullFloydWarshall();
             }
         });
 
         start.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                window.adjustments.updateDisplay(6);
                 window.setTool(6);
-                if (window.graph != null) {
-                    if (window.floydWarshall == null) {
+                if (window.graph != null && window.graph.vertices != null) {
+                    if (window.floydWarshall == null) // Perform Algorithm for the first time
                         window.floydWarshall = new FloydWarshall(window.graph);
-                        window.floydWarshall.start(window);
+                    else {
+                        if (!window.floydWarshall.isRunning()) // Re-run algorithm
+                            window.floydWarshall.useGraph(window.graph);
                     }
+
+                    if (!window.floydWarshall.isRunning()) // In case user clicks start button while running
+                        window.floydWarshall.start(window);
                 }
             }
         });
@@ -159,6 +177,7 @@ public class ButtonPanel extends JPanel {
         reset.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 window.setTool(7);
+                window.adjustments.updateDisplay(7);
                 if (window.graph != null) {
                     nullFloydWarshall();
                     nullGraph();
@@ -166,33 +185,34 @@ public class ButtonPanel extends JPanel {
             }
         });
 
-        adjust.addMouseListener(new MouseListener() {
-            public void mouseEntered(MouseEvent e) {
-                adjust.setForeground(Color.WHITE);
-                adjust.setContentAreaFilled(true);
-                adjust.setBackground(Color.BLUE);
-            }
+        // adjust.addMouseListener(new MouseListener() {
+        // public void mouseEntered(MouseEvent e) {
+        // adjust.setForeground(Color.WHITE);
+        // adjust.setContentAreaFilled(true);
+        // adjust.setBackground(Color.BLUE);
+        // }
 
-            public void mouseExited(MouseEvent e) {
-                adjust.setForeground(Color.BLACK);
-                // adjust.setContentAreaFilled(false);
-                adjust.setBackground(null);
-            }
+        // public void mouseExited(MouseEvent e) {
+        // adjust.setForeground(Color.BLACK);
+        // // adjust.setContentAreaFilled(false);
+        // adjust.setBackground(null);
+        // }
 
-            public void mouseReleased(MouseEvent e) {
-                // adjust.setContentAreaFilled(false);
-                adjust.setForeground(Color.WHITE);
-            }
+        // public void mouseReleased(MouseEvent e) {
+        // // adjust.setContentAreaFilled(false);
+        // adjust.setForeground(Color.WHITE);
+        // }
 
-            public void mouseClicked(MouseEvent e) {
-            }
+        // public void mouseClicked(MouseEvent e) {
+        // }
 
-            public void mousePressed(MouseEvent e) {
-            }
-        });
+        // public void mousePressed(MouseEvent e) {
+        // }
+        // });
 
         inputGraph.addMouseListener(new MouseListener() {
             public void mouseEntered(MouseEvent e) {
+                inputGraph.setToolTipText("Choose an existing graph file");
                 inputGraph.setForeground(Color.WHITE);
                 inputGraph.setContentAreaFilled(true);
                 inputGraph.setBackground(Color.BLUE);
@@ -218,6 +238,7 @@ public class ButtonPanel extends JPanel {
 
         inputVertex.addMouseListener(new MouseListener() {
             public void mouseEntered(MouseEvent e) {
+                inputVertex.setToolTipText("Click anywhere on the area to place a new vertex");
                 inputVertex.setForeground(Color.WHITE);
                 inputVertex.setContentAreaFilled(true);
                 inputVertex.setBackground(Color.BLUE);
@@ -243,6 +264,8 @@ public class ButtonPanel extends JPanel {
 
         inputEdge.addMouseListener(new MouseListener() {
             public void mouseEntered(MouseEvent e) {
+                inputEdge.setToolTipText(
+                        "Choose a source vertex then a destination vertex to create an edge (NOTE: An edge from a vertex to self is not allowed)");
                 inputEdge.setForeground(Color.WHITE);
                 inputEdge.setContentAreaFilled(true);
                 inputEdge.setBackground(Color.BLUE);
@@ -268,6 +291,7 @@ public class ButtonPanel extends JPanel {
 
         removeVertex.addMouseListener(new MouseListener() {
             public void mouseEntered(MouseEvent e) {
+                removeVertex.setToolTipText("Click any vertex on the area to be removed");
                 removeVertex.setForeground(Color.WHITE);
                 removeVertex.setContentAreaFilled(true);
                 removeVertex.setBackground(Color.BLUE);
@@ -293,6 +317,7 @@ public class ButtonPanel extends JPanel {
 
         removeEdge.addMouseListener(new MouseListener() {
             public void mouseEntered(MouseEvent e) {
+                removeEdge.setToolTipText("Choose a source vertex then a destination vertex with an existing edge");
                 removeEdge.setForeground(Color.WHITE);
                 removeEdge.setContentAreaFilled(true);
                 removeEdge.setBackground(Color.BLUE);
@@ -318,6 +343,7 @@ public class ButtonPanel extends JPanel {
 
         start.addMouseListener(new MouseListener() {
             public void mouseEntered(MouseEvent e) {
+                start.setToolTipText("Run the algorithm");
                 start.setForeground(Color.WHITE);
                 start.setContentAreaFilled(true);
                 start.setBackground(Color.BLUE);
@@ -343,6 +369,7 @@ public class ButtonPanel extends JPanel {
 
         reset.addMouseListener(new MouseListener() {
             public void mouseEntered(MouseEvent e) {
+                reset.setToolTipText("Reset the graph");
                 reset.setForeground(Color.WHITE);
                 reset.setContentAreaFilled(true);
                 reset.setBackground(Color.BLUE);

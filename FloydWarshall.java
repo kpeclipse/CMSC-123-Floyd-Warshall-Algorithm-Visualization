@@ -14,10 +14,7 @@ public class FloydWarshall {
     // }
 
     public FloydWarshall(Graph g) {
-        V = g.vertices.size();
-        dist = new double[V][V];
-
-        initialize(g.weights);
+        useGraph(g);
 
         /**
          * // Algorithm for (int k = 0; k < V; k++) { // Source Vertex for (int i = 0; i
@@ -27,6 +24,13 @@ public class FloydWarshall {
          */
 
         // showMatrix();
+    }
+
+    public void useGraph(Graph g) {
+        V = g.vertices.size();
+        dist = new double[V][V];
+
+        initialize(g.weights);
     }
 
     public boolean isRunning() {
@@ -42,13 +46,14 @@ public class FloydWarshall {
     }
 
     public void start(Window window) {
-        run = true;
         trace = new Thread(new AlgorithmTracing(window));
         trace.start();
     }
 
     public void stop() {
-        trace.interrupt();
+        if (isRunning())
+            trace.interrupt();
+        trace = null;
     }
 
     public void compare(int k, int i, int j) {

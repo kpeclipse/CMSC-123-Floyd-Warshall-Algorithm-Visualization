@@ -55,8 +55,10 @@ public class GraphPanel extends JPanel {
                             if (window.floydWarshall != null && window.floydWarshall.isRunning()) {
                                 if (i == x)
                                     g.setColor(Color.BLUE);
-                                else if (i == k || i == y)
+                                else if (i == k)
                                     g.setColor(Color.RED);
+                                else if (i == y)
+                                    g.setColor(Color.GREEN);
                                 else
                                     g.setColor(Color.PINK);
                             } else
@@ -136,8 +138,8 @@ public class GraphPanel extends JPanel {
 
                             if (element == null) { // check if there is no overlapping vertex
                                 do {
-                                    element = JOptionPane.showInputDialog("Vertex Name (Max: 3)");
-                                } while (element != null && element.length() > 3); // 3 characters only
+                                    element = JOptionPane.showInputDialog("Vertex Name");
+                                } while (element.replaceAll("\\s", "").equals(""));
 
                                 if (element != null) {
                                     if (window.graph.vertices != null) {
@@ -165,6 +167,7 @@ public class GraphPanel extends JPanel {
                         case 3:
                             if (first == null) { // Choose first vertex
                                 first = checkVertex(e.getX(), e.getY());
+                                window.adjustments.setSourceVertex(first);
                             }
 
                             else { // First vertex chosen
@@ -173,7 +176,6 @@ public class GraphPanel extends JPanel {
                                 second = checkVertex(e.getX(), e.getY()); // choose second vertex
 
                                 if (second != null) { // Two vertices chosen
-                                    reset = true;
                                     if (first.equals(second)) { // If user attempts to create a loop
                                         JOptionPane.showMessageDialog(null, "LOOP NOT ALLOWED");
                                         canAddEdge = false;
@@ -189,7 +191,7 @@ public class GraphPanel extends JPanel {
 
                                     if (canAddEdge) { // if edge is unique
                                         String weight;
-
+                                        window.adjustments.setDestinationVertex(second);
                                         // Ask for weight
                                         try {
                                             weight = JOptionPane.showInputDialog("Edge Weight");
@@ -200,12 +202,15 @@ public class GraphPanel extends JPanel {
                                             JOptionPane.showMessageDialog(null, "INVALID WEIGHT");
                                         }
                                     }
+
+                                    reset = true;
                                 }
 
                                 else
                                     reset = true;
 
                                 if (reset) {
+                                    window.adjustments.resetVertices();
                                     first = null; // Allowed to look for first vertex again
                                     second = null;
                                 }
@@ -232,6 +237,7 @@ public class GraphPanel extends JPanel {
                             if (window.graph.edges != null) {
                                 if (first == null) { // Choose first vertex
                                     first = checkVertex(e.getX(), e.getY());
+                                    window.adjustments.setSourceVertex(first);
                                 }
 
                                 else { // First vertex chosen
@@ -260,14 +266,17 @@ public class GraphPanel extends JPanel {
                                         if (window.graph.edges.size() == 0)
                                             window.graph.edges = null;
 
-                                        if (!canRemoveEdge) // in case edge does not exist
+                                        if (!canRemoveEdge) { // in case edge does not exist
+                                            window.adjustments.setDestinationVertex(second);
                                             JOptionPane.showMessageDialog(null, "EDGE DOES NOT EXIST");
+                                        }
                                     }
 
                                     else
                                         reset = true;
 
                                     if (reset) {
+                                        window.adjustments.resetVertices();
                                         first = null; // Allowed to look for first vertex again
                                         second = null;
                                     }
@@ -285,6 +294,7 @@ public class GraphPanel extends JPanel {
         });
         panel.add(canvasPanel);
         return panel;
+
     }
 
     // method to draw a directed arrowline

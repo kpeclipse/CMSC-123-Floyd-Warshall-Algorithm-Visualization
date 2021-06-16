@@ -38,7 +38,7 @@ public class AlgorithmPanel extends JPanel {
                 circle.drawOval(60, 210, 40, 40); // i node
                 circle.setColor(Color.RED);
                 circle.drawOval(170, 160, 40, 40); // k node
-                circle.setColor(Color.RED);
+                circle.setColor(Color.GREEN);
                 circle.drawOval(280, 210, 40, 40); // j node
                 circle.setStroke(prevStroke);
 
