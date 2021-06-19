@@ -19,16 +19,16 @@ public class GraphReader {
     }
 
     public void setCoordinates() { // possible coordinates for random vertices
-        int multiple = 30;
-        for (int i = 0; i < 17; i++) {
+        int multiple = 50;
+        for (int i = 0; i < 10; i++) {
             xBounds.add(multiple);
             yBounds.add(multiple);
-            multiple += 30;
+            multiple += 50;
         }
 
-        for (int i = 17; i < 22; i++) {
+        for (int i = 10; i < 13; i++) {
             yBounds.add(multiple);
-            multiple += 30;
+            multiple += 50;
         }
     }
 
@@ -60,8 +60,8 @@ public class GraphReader {
                 }
 
                 if (readVertex) {
-                    setX = xBounds.get(r.nextInt(17));
-                    setY = yBounds.get(r.nextInt(22));
+                    setX = xBounds.get(r.nextInt(10));
+                    setY = yBounds.get(r.nextInt(13));
 
                     if (graph.vertices != null) {
                         boolean overlap = true;
@@ -69,13 +69,14 @@ public class GraphReader {
                             overlap = checkVertex(setX, setY); // check if there is existing vertex on point
 
                             if (overlap) {
-                                setX = xBounds.get(r.nextInt(17));
-                                setY = yBounds.get(r.nextInt(22));
+                                setX = xBounds.get(r.nextInt(10));
+                                setY = yBounds.get(r.nextInt(13));
                             }
                         }
                     }
 
-                    graph.addVertex(line, setX, setY);
+                    if (graph.vertices == null || (graph.vertices != null && graph.vertices.size() < 50))
+                        graph.addVertex(line, setX, setY);
                 }
 
                 if (readEdge) {

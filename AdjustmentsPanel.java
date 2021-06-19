@@ -113,13 +113,13 @@ public class AdjustmentsPanel extends JPanel {
         dGraph.setFont(new Font("Arial", Font.PLAIN, 13));
         dGraph.setContentAreaFilled(false);
         dGraph.setFocusPainted(false);
-        dGraph.setBounds(10, 60, 180, 30);
+        dGraph.setBounds(10, 70, 180, 30);
 
         uGraph = new JRadioButton("UNDIRECTED GRAPH");
         uGraph.setFont(new Font("Arial", Font.PLAIN, 13));
         uGraph.setContentAreaFilled(false);
         uGraph.setFocusPainted(false);
-        uGraph.setBounds(10, 80, 180, 30);
+        uGraph.setBounds(10, 90, 180, 30);
         dGraph.isSelected();
 
         ButtonGroup G = new ButtonGroup();
@@ -134,15 +134,15 @@ public class AdjustmentsPanel extends JPanel {
     private void setSimulationSpeed() {
         JLabel simulationSpeed = new JLabel("SIMULATION SPEED");
         simulationSpeed.setFont(new Font("Arial", Font.PLAIN, 15));
-        simulationSpeed.setBounds(30, 115, 150, 30);
+        simulationSpeed.setBounds(30, 125, 150, 30);
 
         JLabel fast = new JLabel("Fast");
         fast.setFont(new Font("Arial", Font.PLAIN, 13));
-        fast.setBounds(80, 155, 150, 30);
+        fast.setBounds(80, 160, 150, 30);
 
         JLabel slow = new JLabel("Slow");
         slow.setFont(new Font("Arial", Font.PLAIN, 13));
-        slow.setBounds(80, 335, 150, 30);
+        slow.setBounds(80, 330, 150, 30);
 
         slider = new JSlider(JSlider.VERTICAL, 1, 10, 5);
         slider.setMajorTickSpacing(1);

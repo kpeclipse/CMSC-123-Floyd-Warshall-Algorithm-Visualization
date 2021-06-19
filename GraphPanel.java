@@ -21,6 +21,7 @@ public class GraphPanel extends JPanel {
     private String second = null;
 
     private int startX = 50, startY = 50;
+    private int endX = 530, endY = 665;
     private int k = -1, x = -1, y = -1;
 
     public GraphPanel(Window w) {
@@ -114,7 +115,6 @@ public class GraphPanel extends JPanel {
 
         canvasPanel.addMouseListener(new MouseListener() {
             public void mouseEntered(MouseEvent e) {
-
             }
 
             public void mouseExited(MouseEvent e) {
@@ -134,31 +134,41 @@ public class GraphPanel extends JPanel {
                             String element = null;
                             boolean canAddVertex = true;
 
-                            element = checkVertex(e.getX(), e.getY());
+                            String check = null;
+                            check = checkVertex(e.getX(), e.getY());
 
-                            if (element == null) { // check if there is no overlapping vertex
-                                do {
-                                    element = JOptionPane.showInputDialog("Vertex Name");
-                                } while (element.replaceAll("\\s", "").equals(""));
+                            if (check == null) {
+                                if (window.graph.vertices == null
+                                        || (window.graph.vertices != null && window.graph.vertices.size() < 50)) { // max
+                                    do {
+                                        element = JOptionPane.showInputDialog("Vertex Name");
+                                    } while (element != null && element.replaceAll("\\s", "").equals(""));
+                                }
+                            } else
+                                canAddVertex = false;
 
-                                if (element != null) {
-                                    if (window.graph.vertices != null) {
-                                        for (Vertex v : window.graph.vertices) { // check if vertex exists
-                                            if (v.key.equals(element)) {
-                                                JOptionPane.showMessageDialog(null, "VERTEX EXISTS");
-                                                canAddVertex = false;
-                                            }
+                            if (element != null) {
+                                if (window.graph.vertices != null)
+                                    for (Vertex v : window.graph.vertices) { // check if vertex exists
+                                        if (v.key.equals(element)) {
+                                            JOptionPane.showMessageDialog(null, "VERTEX EXISTS");
+                                            canAddVertex = false;
                                         }
                                     }
-                                    if (canAddVertex) {// if vertex is unique
-                                        int x = e.getX(), y = e.getY();
-                                        if (x < startX)
-                                            x = 30;
-                                        if (y < startY)
-                                            y = 30;
-                                        window.graph.addVertex(element, x, y);
-                                    }
-                                }
+                            } else
+                                canAddVertex = false;
+
+                            if (canAddVertex) {// if vertex is unique
+                                int x = e.getX(), y = e.getY();
+                                if (x < startX)
+                                    x = 30;
+                                if (y < startY)
+                                    y = 30;
+                                if (x > endX)
+                                    x = endX;
+                                if (y > endY)
+                                    y = endY;
+                                window.graph.addVertex(element, x, y);
                             }
 
                             break;
@@ -286,8 +296,6 @@ public class GraphPanel extends JPanel {
                     }
                 }
 
-                // if (window.graph != null) // If a graph exists
-                // window.floydWarshall = new FloydWarshall(window.graph);
                 revalidate();
                 repaint();
             }

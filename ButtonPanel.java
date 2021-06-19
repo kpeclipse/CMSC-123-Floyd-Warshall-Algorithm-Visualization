@@ -38,7 +38,7 @@ public class ButtonPanel extends JPanel {
         // setBackground(Color.BLACK);
 
         tools = new JLabel("TOOLS", SwingConstants.CENTER);
-        tools.setFont(new Font("Arial", Font.PLAIN, 13));
+        tools.setFont(new Font("Arial", Font.BOLD, 13));
         add(tools);
 
         setButtons();
