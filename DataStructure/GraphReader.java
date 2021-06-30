@@ -1,9 +1,13 @@
+package DataStructure;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+
+import UI.Window;
 
 public class GraphReader {
     private Graph graph;
@@ -12,7 +16,7 @@ public class GraphReader {
     private ArrayList<Integer> yBounds = new ArrayList<Integer>();
 
     public GraphReader(Window w, File f) {
-        graph = w.graph;
+        graph = w.getGraph();
         file = f;
         setCoordinates();
         readGraph();

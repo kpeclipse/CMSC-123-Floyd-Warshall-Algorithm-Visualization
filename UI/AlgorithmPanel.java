@@ -1,3 +1,5 @@
+package UI;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -63,9 +65,9 @@ public class AlgorithmPanel extends JPanel {
 
                 g.setColor(Color.BLACK);
                 g.setFont(new Font("Arial", Font.BOLD, 13));
-                g.drawString(window.graph.vertices.get(i).key, 75, 230); // i node
-                g.drawString(window.graph.vertices.get(k).key, 185, 180); // k node
-                g.drawString(window.graph.vertices.get(j).key, 295, 230); // j node
+                g.drawString(window.graph.getVertices().get(i).getKey(), 75, 230); // i node
+                g.drawString(window.graph.getVertices().get(k).getKey(), 185, 180); // k node
+                g.drawString(window.graph.getVertices().get(j).getKey(), 295, 230); // j node
 
                 g.drawString(Double.toString(window.floydWarshall.getDist(i, k)), 100, 180);
                 g.drawString(Double.toString(window.floydWarshall.getDist(k, j)), 250, 180);

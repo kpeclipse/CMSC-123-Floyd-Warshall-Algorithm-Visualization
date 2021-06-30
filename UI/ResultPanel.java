@@ -1,3 +1,5 @@
+package UI;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -41,10 +43,10 @@ public class ResultPanel extends JPanel {
                 g.setFont(new Font("Arial", Font.BOLD, 16));
                 g.drawString("COST TABLE", 20, 20);
 
-                if (window.graph != null && window.graph.vertices != null) {
+                if (window.graph != null && window.graph.getVertices() != null) {
                     g.setColor(Color.BLACK);
 
-                    for (int i = 0; i < window.graph.vertices.size(); i++) {
+                    for (int i = 0; i < window.graph.getVertices().size(); i++) {
                         tableStartX = 50;
                         valueStartY = 125;
                         // Draw first box in a row
@@ -53,16 +55,16 @@ public class ResultPanel extends JPanel {
                         g.setFont(new Font("Arial", Font.BOLD, 13));
 
                         // Write the vertices
-                        g.drawString(window.graph.vertices.get(i).key, labelStartX, 80);
-                        g.drawString(window.graph.vertices.get(i).key, 20, labelStartY);
+                        g.drawString(window.graph.getVertices().get(i).getKey(), labelStartX, 80);
+                        g.drawString(window.graph.getVertices().get(i).getKey(), 20, labelStartY);
 
                         // Write the edge weight
                         if (window.floydWarshall != null) // During Tracing
                             g.drawString(Double.toString(window.floydWarshall.getDist(0, i)), valueStartX, valueStartY);
                         else // Before Tracing
-                            g.drawString(Double.toString(window.graph.weights[0][i]), valueStartX, valueStartY);
+                            g.drawString(Double.toString(window.graph.getWeight(0, i)), valueStartX, valueStartY);
 
-                        for (int j = 1; j < window.graph.vertices.size(); j++) {
+                        for (int j = 1; j < window.graph.getVertices().size(); j++) {
                             valueStartY += 60;
                             // Draw boxes
                             g.drawRect(tableStartX + 60, tableStartY, 60, 60);
@@ -72,7 +74,7 @@ public class ResultPanel extends JPanel {
                                 g.drawString(Double.toString(window.floydWarshall.getDist(j, i)), valueStartX,
                                         valueStartY);
                             else
-                                g.drawString(Double.toString(window.graph.weights[j][i]), valueStartX, valueStartY);
+                                g.drawString(Double.toString(window.graph.getWeight(j, i)), valueStartX, valueStartY);
                             tableStartX += 60;
 
                             if (tableStartX > endX)

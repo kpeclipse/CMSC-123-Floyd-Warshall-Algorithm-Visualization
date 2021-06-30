@@ -1,3 +1,5 @@
+package DataStructure;
+
 import java.util.*;
 
 public class Graph {
@@ -14,6 +16,26 @@ public class Graph {
 
     public boolean isDirected() {
         return directed;
+    }
+
+    public ArrayList<Vertex> getVertices() {
+        return vertices;
+    }
+
+    public ArrayList<Edge> getEdges() {
+        return edges;
+    }
+
+    public double[][] getWeights() {
+        return weights;
+    }
+
+    public double getWeight(int i, int j) {
+        return weights[i][j];
+    }
+
+    public void setEdges(ArrayList<Edge> edgeSet) {
+        edges = edgeSet;
     }
 
     public void addEdge(String first, String second, double weight) {

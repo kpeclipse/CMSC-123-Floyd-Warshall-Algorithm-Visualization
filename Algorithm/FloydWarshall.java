@@ -1,3 +1,7 @@
+package Algorithm;
+
+import DataStructure.Graph;
+import UI.Window;
 
 public class FloydWarshall {
     private double[][] dist;
@@ -27,10 +31,10 @@ public class FloydWarshall {
     }
 
     public void useGraph(Graph g) {
-        V = g.vertices.size();
+        V = g.getVertices().size();
         dist = new double[V][V];
 
-        initialize(g.weights);
+        initialize(g.getWeights());
     }
 
     public boolean isRunning() {

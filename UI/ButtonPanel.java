@@ -1,3 +1,5 @@
+package UI;
+
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -10,6 +12,12 @@ import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import Algorithm.FloydWarshall;
+import DataStructure.Edge;
+import DataStructure.Graph;
+import DataStructure.GraphReader;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -131,9 +139,9 @@ public class ButtonPanel extends JPanel {
                 window.adjustments.updateDisplay(3);
                 // creates a directed graph
                 // if in case graph has only one or no vertices
-                if (window.graph != null && window.graph.vertices != null && window.graph.vertices.size() > 1
-                        && window.graph.edges == null) {
-                    window.graph.edges = new ArrayList<Edge>();
+                if (window.graph != null && window.graph.getVertices() != null && window.graph.getVertices().size() > 1
+                        && window.graph.getEdges() == null) {
+                    window.graph.setEdges(new ArrayList<Edge>());
                 }
 
                 nullFloydWarshall();
@@ -160,9 +168,9 @@ public class ButtonPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 window.adjustments.updateDisplay(6);
                 window.setTool(6);
-                if (window.graph != null && window.graph.vertices != null) {
+                if (window.graph != null && window.graph.getVertices() != null) {
                     if (window.floydWarshall == null) // Perform Algorithm for the first time
-                        window.floydWarshall = new FloydWarshall(window.graph);
+                        window.setFloydWarshall(new FloydWarshall(window.getGraph()));
                     else {
                         if (!window.floydWarshall.isRunning()) // Re-run algorithm
                             window.floydWarshall.useGraph(window.graph);

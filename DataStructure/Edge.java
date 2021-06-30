@@ -1,4 +1,6 @@
-class Edge {
+package DataStructure;
+
+public class Edge {
     Vertex first;
     Vertex second;
     double value;
@@ -14,5 +16,17 @@ class Edge {
     public Edge(Vertex f, Vertex s) {
         first = f;
         second = s;
+    }
+
+    public Vertex getFirst() {
+        return first;
+    }
+
+    public Vertex getSecond() {
+        return second;
+    }
+
+    public double getValue() {
+        return value;
     }
 }

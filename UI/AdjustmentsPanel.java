@@ -1,3 +1,5 @@
+package UI;
+
 import java.awt.Color;
 import java.awt.Font;
 
@@ -144,7 +146,7 @@ public class AdjustmentsPanel extends JPanel {
         slow.setFont(new Font("Arial", Font.PLAIN, 13));
         slow.setBounds(80, 330, 150, 30);
 
-        slider = new JSlider(JSlider.VERTICAL, 1, 10, 5);
+        slider = new JSlider(JSlider.VERTICAL, 1, 10, 1);
         slider.setMajorTickSpacing(1);
         slider.setPaintTicks(false);
         slider.setBounds(30, 160, 30, 200);

@@ -1,3 +1,5 @@
+package DataStructure;
+
 import java.util.ArrayList;
 
 public class Vertex {
@@ -10,6 +12,10 @@ public class Vertex {
         key = name;
         this.x = x;
         this.y = y;
+    }
+
+    public String getKey() {
+        return key;
     }
 
     public void setX(int x) {

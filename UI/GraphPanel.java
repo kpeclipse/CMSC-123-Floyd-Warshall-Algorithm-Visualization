@@ -1,3 +1,5 @@
+package UI;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Rectangle;
@@ -12,6 +14,9 @@ import java.lang.Math;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import DataStructure.Edge;
+import DataStructure.Vertex;
 
 // Graph Visualisation
 public class GraphPanel extends JPanel {
@@ -42,14 +47,14 @@ public class GraphPanel extends JPanel {
                 // if graph is not empty
                 if (window.graph != null) {
                     // DISPLAY VERTICES
-                    if (window.graph.vertices != null) {
-                        for (int i = 0; i < window.graph.vertices.size(); i++) {
+                    if (window.graph.getVertices() != null) {
+                        for (int i = 0; i < window.graph.getVertices().size(); i++) {
                             Graphics2D circle = (Graphics2D) g;
                             Stroke prevStroke = circle.getStroke();
                             circle.setStroke(new BasicStroke(3));
                             circle.setColor(Color.BLACK);
-                            circle.drawOval(window.graph.vertices.get(i).getX() - 15,
-                                    window.graph.vertices.get(i).getY() - 15, 30, 30);
+                            circle.drawOval(window.graph.getVertices().get(i).getX() - 15,
+                                    window.graph.getVertices().get(i).getY() - 15, 30, 30);
                             circle.setStroke(prevStroke);
 
                             // For Algorithm Tracing
@@ -65,29 +70,32 @@ public class GraphPanel extends JPanel {
                             } else
                                 g.setColor(Color.PINK);
 
-                            g.fillOval(window.graph.vertices.get(i).getX() - 15,
-                                    window.graph.vertices.get(i).getY() - 15, 30, 30);
+                            g.fillOval(window.graph.getVertices().get(i).getX() - 15,
+                                    window.graph.getVertices().get(i).getY() - 15, 30, 30);
                             g.setColor(Color.BLACK);
-                            g.drawString(window.graph.vertices.get(i).key, window.graph.vertices.get(i).getX() - 10,
-                                    window.graph.vertices.get(i).getY() - 20);
+                            g.drawString(window.graph.getVertices().get(i).getKey(),
+                                    window.graph.getVertices().get(i).getX() - 10,
+                                    window.graph.getVertices().get(i).getY() - 20);
                         }
                     }
 
                     // DISPLAY EDGES
-                    if (window.graph.edges != null) {
-                        for (int i = 0; i < window.graph.edges.size(); i++) {
+                    if (window.graph.getEdges() != null) {
+                        for (int i = 0; i < window.graph.getEdges().size(); i++) {
                             g.setColor(Color.BLACK);
 
-                            double from = angleBetween(window.graph.edges.get(i).first.getX(),
-                                    window.graph.edges.get(i).first.getY(), window.graph.edges.get(i).second.getX(),
-                                    window.graph.edges.get(i).second.getY());
-                            double to = angleBetween(window.graph.edges.get(i).second.getX(),
-                                    window.graph.edges.get(i).second.getY(), window.graph.edges.get(i).first.getX(),
-                                    window.graph.edges.get(i).first.getY());
+                            double from = angleBetween(window.graph.getEdges().get(i).getFirst().getX(),
+                                    window.graph.getEdges().get(i).getFirst().getY(),
+                                    window.graph.getEdges().get(i).getSecond().getX(),
+                                    window.graph.getEdges().get(i).getSecond().getY());
+                            double to = angleBetween(window.graph.getEdges().get(i).getSecond().getX(),
+                                    window.graph.getEdges().get(i).getSecond().getY(),
+                                    window.graph.getEdges().get(i).getFirst().getX(),
+                                    window.graph.getEdges().get(i).getFirst().getY());
 
-                            Vertex first = window.graph.edges.get(i).first;
-                            Vertex second = window.graph.edges.get(i).second;
-                            double weight = window.graph.edges.get(i).value;
+                            Vertex first = window.graph.getEdges().get(i).getFirst();
+                            Vertex second = window.graph.getEdges().get(i).getSecond();
+                            double weight = window.graph.getEdges().get(i).getValue();
 
                             if (!window.graph.isDirected()) { // If graph is undirected
                                 g.drawLine(getNewX(first.getX(), from, 15), getNewY(first.getY(), from, 15),
@@ -138,8 +146,8 @@ public class GraphPanel extends JPanel {
                             check = checkVertex(e.getX(), e.getY());
 
                             if (check == null) {
-                                if (window.graph.vertices == null
-                                        || (window.graph.vertices != null && window.graph.vertices.size() < 50)) { // max
+                                if (window.graph.getVertices() == null || (window.graph.getVertices() != null
+                                        && window.graph.getVertices().size() < 50)) { // max
                                     do {
                                         element = JOptionPane.showInputDialog("Vertex Name");
                                     } while (element != null && element.replaceAll("\\s", "").equals(""));
@@ -148,9 +156,9 @@ public class GraphPanel extends JPanel {
                                 canAddVertex = false;
 
                             if (element != null) {
-                                if (window.graph.vertices != null)
-                                    for (Vertex v : window.graph.vertices) { // check if vertex exists
-                                        if (v.key.equals(element)) {
+                                if (window.graph.getVertices() != null)
+                                    for (Vertex v : window.graph.getVertices()) { // check if vertex exists
+                                        if (v.getKey().equals(element)) {
                                             JOptionPane.showMessageDialog(null, "VERTEX EXISTS");
                                             canAddVertex = false;
                                         }
@@ -190,8 +198,9 @@ public class GraphPanel extends JPanel {
                                         JOptionPane.showMessageDialog(null, "LOOP NOT ALLOWED");
                                         canAddEdge = false;
                                     } else {
-                                        for (Edge edge : window.graph.edges) { // check if edge exists
-                                            if (edge.first.key.equals(first) && edge.second.key.equals(second)) {
+                                        for (Edge edge : window.graph.getEdges()) { // check if edge exists
+                                            if (edge.getFirst().getKey().equals(first)
+                                                    && edge.getSecond().getKey().equals(second)) {
                                                 JOptionPane.showMessageDialog(null, "EDGE EXISTS");
                                                 canAddEdge = false;
                                                 break;
@@ -231,10 +240,10 @@ public class GraphPanel extends JPanel {
                         case 4:
                             String removeVertex = checkVertex(e.getX(), e.getY());
                             if (removeVertex != null) {
-                                for (Vertex v : window.graph.vertices) {
-                                    if (v.key.equals(removeVertex)) {
+                                for (Vertex v : window.graph.getVertices()) {
+                                    if (v.getKey().equals(removeVertex)) {
                                         window.graph.removeVertex(v);
-                                        if (window.graph.vertices.size() == 0)
+                                        if (window.graph.getVertices().size() == 0)
                                             window.buttons.nullGraph();
                                         break;
                                     }
@@ -244,7 +253,7 @@ public class GraphPanel extends JPanel {
 
                         // Remove Edge
                         case 5:
-                            if (window.graph.edges != null) {
+                            if (window.graph.getEdges() != null) {
                                 if (first == null) { // Choose first vertex
                                     first = checkVertex(e.getX(), e.getY());
                                     window.adjustments.setSourceVertex(first);
@@ -257,24 +266,28 @@ public class GraphPanel extends JPanel {
 
                                     if (second != null) { // Two vertices chosen
                                         reset = true;
-                                        for (Edge edge : window.graph.edges) { // check if edge exists
-                                            if (edge.first.key.equals(first) && edge.second.key.equals(second)) {
+                                        for (Edge edge : window.graph.getEdges()) { // check if edge exists
+                                            if (edge.getFirst().getKey().equals(first)
+                                                    && edge.getSecond().getKey().equals(second)) {
                                                 canRemoveEdge = true;
-                                                window.graph.removeEdge(edge.first, edge.second, edge.value);
+                                                window.graph.removeEdge(edge.getFirst(), edge.getSecond(),
+                                                        edge.getValue());
                                                 break;
                                             }
 
                                             if (!window.graph.isDirected()) { // in case graph is undirected
-                                                if (edge.first.key.equals(second) && edge.second.key.equals(first)) {
+                                                if (edge.getFirst().getKey().equals(second)
+                                                        && edge.getSecond().getKey().equals(first)) {
                                                     canRemoveEdge = true;
-                                                    window.graph.removeEdge(edge.first, edge.second, edge.value);
+                                                    window.graph.removeEdge(edge.getFirst(), edge.getSecond(),
+                                                            edge.getValue());
                                                     break;
                                                 }
                                             }
                                         }
 
-                                        if (window.graph.edges.size() == 0)
-                                            window.graph.edges = null;
+                                        if (window.graph.getEdges().size() == 0)
+                                            window.graph.setEdges(null);
 
                                         if (!canRemoveEdge) { // in case edge does not exist
                                             window.adjustments.setDestinationVertex(second);
@@ -332,16 +345,16 @@ public class GraphPanel extends JPanel {
         Rectangle boundaries;
 
         if (window.graph != null) { // if graph exists
-            if (window.graph.vertices != null) {
-                for (int i = 0; i < window.graph.vertices.size(); i++) {
+            if (window.graph.getVertices() != null) {
+                for (int i = 0; i < window.graph.getVertices().size(); i++) {
                     if (window.getTool() == 2) // to avoid overlapping when adding new vertices
-                        boundaries = new Rectangle(window.graph.vertices.get(i).getX() - 40,
-                                window.graph.vertices.get(i).getY() - 40, 80, 80);
+                        boundaries = new Rectangle(window.graph.getVertices().get(i).getX() - 40,
+                                window.graph.getVertices().get(i).getY() - 40, 80, 80);
                     else
-                        boundaries = new Rectangle(window.graph.vertices.get(i).getX() - 15,
-                                window.graph.vertices.get(i).getY() - 15, 30, 30);
+                        boundaries = new Rectangle(window.graph.getVertices().get(i).getX() - 15,
+                                window.graph.getVertices().get(i).getY() - 15, 30, 30);
                     if (boundaries.contains(new Point(x, y)))
-                        return window.graph.vertices.get(i).key;
+                        return window.graph.getVertices().get(i).getKey();
                 }
             }
         }
